@@ -1,0 +1,40 @@
+{
+  "name": "deforestation",
+  "version": "1.0.0",
+  "description": "A Twitter bot made to better visualize and understand deforestation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/subiabre/deforestation.git"
+  },
+  "keywords": [
+    "twitter",
+    "deforestation",
+    "global",
+    "forests",
+    "watch",
+    "bot"
+  ],
+  "author": "Facundo Subiabre",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/subiabre/deforestation/issues"
+  },
+  "homepage": "https://gitlab.com/subiabre/deforestation#README",
+  "dependencies": {
+    "country-iso-2-to-3": "^1.1.0",
+    "country-list": "^2.2.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.6",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.0.0",
+    "nodemon": "^2.0.2"
+  }
+}
