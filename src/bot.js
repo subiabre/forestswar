@@ -69,6 +69,8 @@ class Deforestation
             database: process.env.DATABASE_URL,
 
             logging: process.env.LOGGING,
+
+            delay: process.env.DELAY_MS || 300,
         }
 
         // Start empty log
@@ -169,7 +171,7 @@ class Deforestation
             this.console('NO NEW UPDATES TO FETCH');
         }
 
-        this.console('BOT ROUTINE FINISHED.')
+        this.console('BOT ROUTINE FINISHED.');
     }
 
     /**
@@ -338,39 +340,59 @@ class Deforestation
     {
         return new Promise((resolve, reject) => {
             let area = 0;
+            let errors = 0;
             let start = new Date().getTime();
 
             this.countries.getCodes().forEach((country, index) => {
-                let country = this.countryToISO3(country);
+                country = this.countryToISO3(country);
+                let delay = this.env.delay * (index + 1);
 
-                this.http.get(this.gfw + '/admin/' + country + period, (GLAD) => {
-                    let alert;
-
-                    GLAD.on('data', (data) => {
-                        try {
-                            alert = JSON.parse(data).data;
-                        } catch (error) {
-                            alert = null;
-                        }
+                // Add delay between calls to not saturate server
+                setTimeout(() => {
+                    this.http.get(this.gfw + '/admin/' + country + period, (GLAD) => {
+                        let alert;
+    
+                        GLAD.on('data', (data) => {
+                            try {
+                                alert = JSON.parse(data).data;
+                            } catch (error) {
+                                alert = null;
+                                errors++;
+                            }
+                        });
+    
+                        GLAD.on('end', () => {
+                            if (alert && alert.attributes.value > 0) {
+                                // Each alert value represents a pixel of 30m x 30m
+                                area += alert.attributes.value*30*30;
+                            }
+    
+                            if (index >= this.countries.getCodes().length - 1) {
+                                let time = (new Date().getTime() - start) / 1000;
+                                let calls = index + 1;
+                                
+                                this.console('FETCHED ' + calls + ' COUNTRIES IN ' + time + 's');
+                                this.console('  ERRORS: ' + errors);
+                                this.console('  DELAY TIME: ' + (delay / 1000) + 's (' + this.env.delay + 'ms)');
+                                this.console('  LOST AREA IS: ' + this.calcKms(area) + 'km2');
+    
+                                resolve(area);
+                            }    
+                        });
                     });
-
-                    GLAD.on('end', () => {
-                        if (alert && alert.attributes.value > 0) {
-                            // Each alert value represents a pixel of 30m x 30m
-                            area += alert.attributes.value*30*30;
-                        }
-
-                        if (index >= this.countries.getCodes().length - 1) {
-                            resolve({
-                                area: area,
-                                fetched: index + 1,
-                                time: (new Date().getTime() - start) / 1000,
-                            });
-                        }    
-                    });
-                });
+                }, delay);
             });
         });
+    }
+
+    /**
+     * Calc the size of an area from square metres to kilometres
+     * @param {number} metres Square metres area 
+     * @return {number} Rounded up square kms
+     */
+    calcKms(metres)
+    {
+        return Math.round(metres / 1000000);
     }
 
 }
