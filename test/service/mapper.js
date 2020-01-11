@@ -3,38 +3,37 @@ var Mapper = require('../../src/service/mapper'),
     assert = chai.assert;
 
 describe('Service: mapper', () => {
-    it ('should retrieve a map from GADM', async () => {
-        var mapper = new Mapper();
-        var map = await mapper.getMapOf('AND');
+    it ('should retrieve a map from GADM', async function() {
+        this.timeout(10000);
+
+        var mapper = new Mapper('AND');
+        var map = await mapper.fetchGADM();
 
         assert.isObject(map);
+        assert.exists(map.bitmap);
     });
 
-    it ('should transparent the country shape', async () => {
-        var mapper = new Mapper();
-        var map = await mapper.getMapOf('AND');
-        var newMap = mapper.emptyInline(map);
+    it('should generate a background the same size the map', async function() {
+        this.timeout(10000);
 
-        assert.isObject(newMap);
+        var mapper = new Mapper('AND');
+        var bg = await mapper.makeBackground();
+
+        assert.isObject(bg);
+        assert.exists(bg.bitmap);
+        assert.equal(bg.bitmap.height, 393);
+        assert.equal(bg.bitmap.width, 480);
     });
 
-    it ('should read image x and y length', async () => {
-        var mapper = new Mapper();
-        var map = await mapper.getMapOf('AND');
-        var dimensions = mapper.getDimensions(map);
+    it ('should generate a fill with the specified area', async function() {
+        this.timeout(10000);
 
-        assert.isObject(dimensions);
-        assert.isNumber(dimensions.x);
-        assert.isNumber(dimensions.y);
-    });
+        var mapper = new Mapper('AND');
+        var fill = await mapper.makeFill(50);
 
-    it ('should fill a map in a responsize way', async () => {
-        var mapper = new Mapper();
-        var map = await mapper.getMapOf('AND');
-        var filledMap = mapper.fillMap(map, 234);
-        var image = await mapper.saveToPng(filledMap);
-
-        assert.isObject(filledMap);
-        assert.exists(image);
+        assert.isObject(fill);
+        assert.exists(fill.bitmap);
+        assert.equal(fill.bitmap.height, 393);
+        assert.equal(fill.bitmap.width, 240);
     });
 });
