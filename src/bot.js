@@ -73,7 +73,7 @@ class Deforestation
 
             logging: process.env.LOGGING,
 
-            delay: process.env.DELAY_MS || 300,
+            delay: process.env.DELAY_MS || 400,
 
             startDate: process.env.START_DATE
         }
@@ -154,25 +154,27 @@ class Deforestation
         // Recall last alert in database
         let fromMemory = await this.fetchMemory();
         this.fromMemoryDate = this.formatDate(fromMemory.dateIssued);
-        this.console('LAST ALERT IS: ' + this.fromMemoryDate + ' (LOCAL AT ' + this.formatDate(fromMemory.dateLocal) + ')');
+        this.console('LAST ALERT DATE IS: ' + this.fromMemoryDate + ' (LOCAL AT ' + this.formatDate(fromMemory.dateLocal) + ')');
 
         // Fetch last alert date
         this.fromApiDate = await this.fetchLatest();
-        this.console('NEW ALERT IS: ' + this.fromApiDate);
+        this.console('NEW ALERT DATE IS: ' + this.fromApiDate);
 
         // Compare alerts
         if (this.compareDates(this.fromMemoryDate, this.fromApiDate)) {
             // Retrieve accumulated alerts data
-            this.console('DATABASE IS OUTDATED, FETCHING NEW ALERTS...');
+            this.console('FETCHING NEW ALERTS SINCE ' + this.fromMemoryDate);
             let alerts = await this.fetchAlerts(this.formatPeriod(this.fromMemoryDate));
 
             // Calc total area lost
             this.console('STORING RESULT IN DATABASE');
-            let alert = await this.newAlert(alerts.area, fromMemory);
+            let alertsArea = this.calcKms(alerts);
+            let alert = await this.newAlert(alertsArea, fromMemory);
 
             // Make map
             this.console('STARTING MAP SERVICE');
-            let alertArea = alert.countryArea - alert.countryRemainingArea;
+            let countryArea = await this.fetchCountryArea(alert.country);
+            let alertArea = countryArea - alert.countryRemainingArea;
             let map = await this.makeMap(alert.country, alertArea);
 
             // Update Twitter
@@ -218,7 +220,7 @@ class Deforestation
     async fakeAlert()
     {
         let Alert = require('./models/alert');
-        let dateIssued = this.env.startDate || await this.fetchLatest();
+        let dateIssued = this.env.startDate;
         let country = this.countryToISO3(this.countries.getCodes()[0]);
         let countryArea = await this.fetchCountryArea(country);
         
@@ -261,6 +263,7 @@ class Deforestation
      */
     async newAlert(area, fromMemory)
     {
+        let areaTotal = fromMemory.area + area;
         let countryArea = await this.fetchCountryArea(fromMemory.country);
         let countryRemainingArea = countryArea - area - fromMemory.areaRemaining;
 
@@ -275,10 +278,10 @@ class Deforestation
         let alert = {
             dateIssued: this.fromApiDate,
             country: fromMemory.country,
-            countryRemainingArea: countryArea - area,
+            countryRemainingArea: countryRemainingArea,
             area: area,
             areaRemaining: areaRemaining,
-            areaTotal: fromMemory.area + area
+            areaTotal: areaTotal
         }
 
         return this.persistAlert(alert);
@@ -431,7 +434,7 @@ class Deforestation
                 background.composite(map, 0, 0);
                 background.write('./map/map.png');
 
-                console.log('DREW MAP OF ' + country);
+                console.log('MAP FINISHED.');
                 return background;
             })
             .catch((error) => {
