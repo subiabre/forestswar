@@ -36,4 +36,13 @@ describe('Service: mapper', () => {
         assert.equal(fill.bitmap.height, 393);
         assert.equal(fill.bitmap.width, 240);
     });
+
+    it ('should calculate the fill size', async function() {
+        this.timeout(10000);
+
+        var mapper = new Mapper('AND');
+        var fillSize = await mapper.calcFill(234);
+
+        assert.isNumber(fillSize);
+    });
 });
