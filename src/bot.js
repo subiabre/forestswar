@@ -12,15 +12,15 @@
 class Deforestation
 {
     /**
-     * Instantiate the bot to run it
+     * Deforestation bot.
+     * 
+     * A bot to help visualize forest loss accross the globe.
      */
     constructor()
     {
         this.loadEnv();
 
         this.loadServices();
-
-        this.routine();
     }
 
     /**
@@ -159,10 +159,12 @@ class Deforestation
         if (this.compareDates(this.fromMemoryDate, this.fromApiDate)) {
             // Retrieve accumulated alerts data
             let alerts = await this.fetchAlerts(this.formatPeriod(this.fromMemoryDate));
-            this.console(alerts);
 
             // Calc total area lost
-            let alert = await this.newAlert(alerts.area, fromMemory.country);
+            let alert = await this.newAlert(alerts.area, fromMemory);
+
+            // Make map
+            let map = await this.makeMap(alert.countryArea - alert.countryRemainingArea);
 
             // Update Twitter
         }
@@ -393,6 +395,39 @@ class Deforestation
     calcKms(metres)
     {
         return Math.round(metres / 1000000);
+    }
+
+    /**
+     * Make maps illustrating the deforestated area
+     * @param {string} country Country ISO3 code
+     * @param {*} area Country deforestated area
+     */
+    async makeMap(country, area)
+    {
+        let Mapper = require('./service/mapper');
+        let Jimp = require('jimp');
+        let map = new Mapper(country);
+
+        let fillSize = await map.calcFill(area);
+
+        let background = await map.makeBackground();
+        let fill = await map.makeFill(fillSize);
+        let top = await map.fetchGADM();
+        
+        top.write('./map/top.png');
+        Jimp.read('./map/top.png')
+            .then((map) => {
+                background.composite(fill, 0, 0);
+                background.write('./map/fill.png');
+                background.composite(map, 0, 0);
+                background.write('./map/map.png');
+
+                console.log('DREW MAP OF ' + country);
+                return background;
+            })
+            .catch((error) => {
+                return error;
+            });
     }
 
 }
