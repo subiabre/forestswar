@@ -11,6 +11,7 @@ describe('Service: mapper', () => {
 
         assert.isObject(map);
         assert.exists(map.bitmap);
+        assert.equal(typeof map.write, 'function');
     });
 
     it('should generate a background the same size the map', async function() {
