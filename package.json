@@ -4,7 +4,8 @@
   "description": "A Twitter bot made to better visualize and understand deforestation.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive --exit"
+    "test": "mocha --recursive --exit",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
