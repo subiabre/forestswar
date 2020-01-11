@@ -29,7 +29,10 @@ class Deforestation
      */
     console(message)
     {
-        this.consoleLog.push(message);
+        this.consoleLog.push({
+            message: message,
+            date: new Date()
+        });
 
         if (this.env.logging) {
             console.log(message);
@@ -160,12 +163,15 @@ class Deforestation
         // Compare alerts
         if (this.compareDates(this.fromMemoryDate, this.fromApiDate)) {
             // Retrieve accumulated alerts data
+            this.console('DATABASE IS OUTDATED, FETCHING NEW ALERTS...');
             let alerts = await this.fetchAlerts(this.formatPeriod(this.fromMemoryDate));
 
             // Calc total area lost
+            this.console('STORING RESULT IN DATABASE');
             let alert = await this.newAlert(alerts.area, fromMemory);
 
             // Make map
+            this.console('STARTING MAP SERVICE');
             let alertArea = alert.countryArea - alert.countryRemainingArea;
             let map = await this.makeMap(alert.country, alertArea);
 
