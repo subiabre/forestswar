@@ -9,6 +9,10 @@ app.get('/status', (req, res) => {
     });
 });
 
-var listener = app.listen(process.env.PORT, () => {
-    console.log('BOT LISTENING AT: http://localhost:' + listener.address().port);
+var listener = app.listen(process.env.PORT, async () => {
+    await bot.routine();
+    
+    let address = 'http://localhost:' + listener.address().port;
+    console.log('SERVER LISTENING AT: ' + address);
+    console.log('REPORTING STATUS AT: ' + address + '/status');
 });
