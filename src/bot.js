@@ -71,6 +71,8 @@ class Deforestation
             logging: process.env.LOGGING,
 
             delay: process.env.DELAY_MS || 300,
+
+            startDate: process.env.START_DATE
         }
 
         // Start empty log
@@ -164,7 +166,8 @@ class Deforestation
             let alert = await this.newAlert(alerts.area, fromMemory);
 
             // Make map
-            let map = await this.makeMap(alert.countryArea - alert.countryRemainingArea);
+            let alertArea = alert.countryArea - alert.countryRemainingArea;
+            let map = await this.makeMap(alert.country, alertArea);
 
             // Update Twitter
         }
@@ -209,7 +212,7 @@ class Deforestation
     async fakeAlert()
     {
         let Alert = require('./models/alert');
-        let dateIssued = await this.fetchLatest();
+        let dateIssued = this.env.startDate || await this.fetchLatest();
         let country = this.countryToISO3(this.countries.getCodes()[0]);
         let countryArea = await this.fetchCountryArea(country);
         
