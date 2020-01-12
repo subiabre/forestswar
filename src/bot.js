@@ -138,12 +138,13 @@ class Deforestation
 
     /**
      * Formats a period of two dates that GFW API can understand
-     * @param {string} date 
+     * @param {string} start Starting date
+     * @param {string} end Ending date
      * @return {string} A string period dates between given date and current date
      */
-    formatPeriod(date)
+    formatPeriod(start, end = new Date())
     {
-        return '?period=' + this.formatDate(date) + ',' + this.formatDate(new Date().getTime());
+        return '?period=' + this.formatDate(start) + ',' + this.formatDate(end);
     }
 
     /**
@@ -164,7 +165,8 @@ class Deforestation
         if (this.compareDates(this.fromMemoryDate, this.fromApiDate)) {
             // Retrieve accumulated alerts data
             this.console('FETCHING NEW ALERTS SINCE ' + this.fromMemoryDate);
-            let alerts = await this.fetchAlerts(this.formatPeriod(this.fromMemoryDate));
+            let period = this.formatPeriod(this.fromMemoryDate);
+            let alerts = await this.fetchAlerts(period);
 
             // Calc total area lost
             this.console('STORING RESULT IN DATABASE');
@@ -173,9 +175,9 @@ class Deforestation
 
             // Make map
             this.console('STARTING MAP SERVICE');
-            let countryArea = await this.fetchCountryArea(alert.country);
             let alertArea = countryArea - alert.countryRemainingArea;
             let map = await this.makeMap(alert.country, alertArea);
+            this.console('MAP SERVICE FINISHED');
 
             // Update Twitter
         }
@@ -384,11 +386,13 @@ class Deforestation
                             if (index >= this.countries.getCodes().length - 1) {
                                 let time = (new Date().getTime() - start) / 1000;
                                 let calls = index + 1;
+
+                                area = this.calcKms(area);
                                 
                                 this.console('FETCHED ' + calls + ' COUNTRIES IN ' + time + 's');
                                 this.console('  ERRORS: ' + errors);
                                 this.console('  DELAY TIME: ' + (delay / 1000) + 's (' + this.env.delay + 'ms)');
-                                this.console('  LOST AREA IS: ' + this.calcKms(area) + 'km2');
+                                this.console('  LOST AREA IS: ' + area + 'km2');
     
                                 resolve(area);
                             }    
@@ -412,34 +416,14 @@ class Deforestation
     /**
      * Make maps illustrating the deforestated area
      * @param {string} country Country ISO3 code
-     * @param {*} area Country deforestated area
+     * @param {*} area Country deforestated area In km2
      */
     async makeMap(country, area)
     {
         let Mapper = require('./service/mapper');
-        let Jimp = require('jimp');
         let map = new Mapper(country);
 
-        let fillSize = await map.calcFill(area);
-
-        let background = await map.makeBackground();
-        let fill = await map.makeFill(fillSize);
-        let top = await map.fetchGADM();
-        
-        top.write('./map/top.png');
-        Jimp.read('./map/top.png')
-            .then((map) => {
-                background.composite(fill, 0, 0);
-                background.write('./map/fill.png');
-                background.composite(map, 0, 0);
-                background.write('./map/map.png');
-
-                console.log('MAP FINISHED.');
-                return background;
-            })
-            .catch((error) => {
-                return error;
-            });
+        return await map.paintArea(area);
     }
 
 }
