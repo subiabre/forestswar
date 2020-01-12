@@ -19,6 +19,16 @@ var alertSchema = new Schema({
         required: true,
         default: 'ISO'
     },
+    countryIndex: {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    countryArea: {
+        type: Number,
+        default: 0,
+        required: true
+    },
     countryRemainingArea: {
         type: Number,
         default: 0,
