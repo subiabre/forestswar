@@ -25,7 +25,7 @@ describe('Service: GLAD', () => {
     it ('should fetch alerts by country', async () => {
         var glad = new GLAD();
         var period = glad.formatPeriod('2019-01-01', '2019-12-31');
-        var alerts = glad.alertsCountry('ESP', period);
+        var alerts = glad.getAlertsCountry('ESP', period);
         
         assert.isNumber(alerts);
     });
@@ -33,7 +33,7 @@ describe('Service: GLAD', () => {
     it ('should fetch alerts from all countries', async () => {
         var glad = new GLAD();
         var period = glad.formatPeriod('2019-01-01', '2019-12-31');
-        var alerts = glad.alerts(period);
+        var alerts = glad.getAlerts(period);
 
         assert.isNumber(alerts);
     });
