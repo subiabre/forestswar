@@ -63,7 +63,7 @@ class GLAD
 
     /**
      * Obtain the date of the last issued alert
-     * @returns {string} String date as YYYY-MM-DD
+     * @returns {string} Date object
      */
     async getLatest()
     {
