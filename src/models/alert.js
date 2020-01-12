@@ -19,11 +19,6 @@ var alertSchema = new Schema({
         required: true,
         default: 'ISO'
     },
-    countryIndex: {
-        type: Number,
-        default: 0,
-        required: true
-    },
     countryArea: {
         type: Number,
         default: 0,
@@ -39,15 +34,19 @@ var alertSchema = new Schema({
         type: Number,
         default: 0
     },
-
     areaRemaining: {
         type: Number,
         default: 0
     },
-
     areaTotal: {
         type: Number,
         default: 0
+    },
+
+    nextIndex: {
+        type: Number,
+        default: 0,
+        required: true
     }
 });
 
