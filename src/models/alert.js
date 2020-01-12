@@ -14,17 +14,12 @@ var alertSchema = new Schema({
         default: new Date().toString()
     },
 
-    country: {
-        type: String,
-        required: true,
-        default: 'ISO'
-    },
-    countryArea: {
+    countryStart: {
         type: Number,
         default: 0,
-        required: true
+        required: true,
     },
-    countryRemainingArea: {
+    countryEnd: {
         type: Number,
         default: 0,
         required: true
@@ -34,19 +29,13 @@ var alertSchema = new Schema({
         type: Number,
         default: 0
     },
-    areaRemaining: {
+    areaAtEnd: {
         type: Number,
         default: 0
     },
     areaTotal: {
         type: Number,
         default: 0
-    },
-
-    nextIndex: {
-        type: Number,
-        default: 0,
-        required: true
     }
 });
 
