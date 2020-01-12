@@ -23,14 +23,14 @@ class Mapper
          */
         this.restcountries = 'http://restcountries.eu/rest/v2/alpha';
 
-        this.country(country);
+        this.setCountry(country);
     }
 
     /**
      * Set the mapper country code
      * @param {string} country Country ISO3 code 
      */
-    country(country)
+    setCountry(country)
     {
         this.country = country;
         this.image = this.gadm + '/' + country + '/' + country + '.png';
@@ -71,19 +71,15 @@ class Mapper
 
         return new Promise((resolve, reject) => {
             http.get(api, (REST) => {
-                REST.on('data', (data) => {
-                    try {
-                        let country = JSON.parse(data).area;
+                var country = '';
 
-                        resolve(country);
-                    } catch (error) {
-                        reject(error);
-                    }
+                REST.on('data', (data) => {
+                    country += data;
                 });
 
-                REST.on('error', (error) => {
-                    console.log(`Error fetching ${api}`);
-                    reject(error);
+                REST.on('end', () => {
+                    country = JSON.parse(country);
+                    resolve(country.area);
                 });
             });
         });
