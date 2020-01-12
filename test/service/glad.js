@@ -5,7 +5,9 @@ var GLAD = require('../../src/service/glad'),
     assert = chai.assert;
 
 describe('Service: GLAD', () => {
-    it ('should format dates', (done) => {
+    it ('should format dates', async function() {
+        this.timeout(10000);
+
         var test = new Date('2019-12-31');
         var glad = new GLAD();
         var date = glad.formatDate(test);
@@ -15,25 +17,31 @@ describe('Service: GLAD', () => {
         assert.equal(period, '?period=2019-01-01,2019-12-31');
     });
 
-    it ('should fetch the latest alert from GLAD', async () => {
-        var glad = new GLAD();
-        var lastAlert = glad.getLatest();
+    it ('should fetch the latest alert from GLAD', async function() {
+        this.timeout(10000);
 
-        assert.instanceOf(lastAlert, new Date());
+        var glad = new GLAD();
+        var lastAlert = await glad.getLatest();
+
+        assert.instanceOf(lastAlert, Date);
     });
 
-    it ('should fetch alerts by country', async () => {
+    it ('should fetch alerts by country', async function() {
+        this.timeout(10000);
+        
         var glad = new GLAD();
         var period = glad.formatPeriod('2019-01-01', '2019-12-31');
-        var alerts = glad.getAlertsCountry('ESP', period);
+        var alerts = await glad.getAlertsCountry('ESP', period);
         
         assert.isNumber(alerts);
     });
 
-    it ('should fetch alerts from all countries', async () => {
+    it ('should fetch alerts from all countries', async function() {
+        this.timeout(101000);
+        
         var glad = new GLAD();
         var period = glad.formatPeriod('2019-01-01', '2019-12-31');
-        var alerts = glad.getAlerts(period);
+        var alerts = await glad.getAlerts(period);
 
         assert.isNumber(alerts);
     });
