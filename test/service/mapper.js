@@ -14,36 +14,16 @@ describe('Service: mapper', () => {
         assert.equal(typeof map.write, 'function');
     });
 
-    it('should generate a background the same size the map', async function() {
+    it ('should paint the given area inside the country', async function() {
         this.timeout(10000);
 
         var mapper = new Mapper('AND');
-        var bg = await mapper.makeBackground();
+        var Jimp = require('jimp');
+        var map = await mapper.paintArea(400);
 
-        assert.isObject(bg);
-        assert.exists(bg.bitmap);
-        assert.equal(bg.bitmap.height, 393);
-        assert.equal(bg.bitmap.width, 480);
-    });
-
-    it ('should generate a fill with the specified area', async function() {
-        this.timeout(10000);
-
-        var mapper = new Mapper('AND');
-        var fill = await mapper.makeFill(50);
-
-        assert.isObject(fill);
-        assert.exists(fill.bitmap);
-        assert.equal(fill.bitmap.height, 393);
-        assert.equal(fill.bitmap.width, 240);
-    });
-
-    it ('should calculate the fill size', async function() {
-        this.timeout(10000);
-
-        var mapper = new Mapper('AND');
-        var fillSize = await mapper.calcFill(234);
-
-        assert.isNumber(fillSize);
+        assert.isObject(map);
+        assert.exists(map.bitmap);
+        assert.equal(typeof map.write, 'function');
+        assert.equal(map.getPixelColor(240, 200), Jimp.cssColorToHex('#19191F'));
     });
 });
