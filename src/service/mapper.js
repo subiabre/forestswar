@@ -47,8 +47,9 @@ class Mapper
             image: this.image,
             colors: {
                 type: 'hex',
-                targetColor: '#d3d3d3', // this is the color GADM colors land with
-                replaceColor: '#00000000' // this is a transparency
+                // Paint the sea in blue
+                targetColor: '#ffffff',
+                replaceColor: '#99CCFF'
             }
         })
         .then((jimp) => {
@@ -89,25 +90,6 @@ class Mapper
     }
 
     /**
-     * Make a background for a map
-     */
-    async makeBackground()
-    {
-        let Jimp = require('jimp');
-        let map = await this.fetchGADM();
-
-        return new Promise((resolve, reject) => {
-            new Jimp(map.bitmap.width, map.bitmap.height, '#83ff9d', (err, bg) => {
-                if (err) {
-                    reject(err);
-                }
-
-                resolve(bg);
-            });
-        });
-    }
-
-    /**
      * FInd the relation of current map country area to pixels
      * @return {number} Square kilometers per pixel in map
      */
@@ -129,40 +111,41 @@ class Mapper
     }
 
     /**
-     * Calculates the fill size for a deforestated area size
-     * @param {number} area Square kilometers
-     * @return {number} Fill size as percentage of the map
+     * Replace the pixels on the map with deforestaded pixels
+     * @param {number} area Deforestated area
      */
-    async calcFill(area)
-    {
-        let country = await this.kilometersToPixels();
-
-        let percentage = (area * 100) / country.kilometers;
-
-        return percentage;
-    }
-    
-    /**
-     * Make a background filling with the specified area percentage
-     * @param {number} area Percentage of map area to be filled
-     */
-    async makeFill(area)
+    async paintArea(area)
     {
         let Jimp = require('jimp');
         let map = await this.fetchGADM();
-        let mapArea = map.bitmap.width * map.bitmap.height;
-        let fillArea = (area * mapArea) / 100;
-        let fillWidth = fillArea / map.bitmap.height;
+        let country = await this.kilometersToPixels();
 
-        return new Promise((resolve, reject) => {
-            new Jimp(fillWidth, map.bitmap.height, '#f13c3c', (err, fill) => {
-                if (err) {
-                    reject(err);
-                }
+        let paintArea = area * country.ppkm,
+            land = Jimp.cssColorToHex('#D3D3D3'),
+            x = 0,
+            y = 0;
 
-                resolve(fill);
-            });
-        });
+        // Parse image top to bottom
+        while (map.bitmap.height >= y) {
+            // Paint land pixels
+            let pixel = map.getPixelColor(x, y);
+            if (pixel == land && paintArea > 0) {
+                map.setPixelColor(0x19191FFF, x, y);
+                paintArea -= 1;
+            }
+
+            // Move to the next column
+            if (map.bitmap.height == y && map.bitmap.width > x) {
+                x++;
+                y = 0;
+            // or to the next pixel
+            } else {
+                y++;
+            }
+        }
+
+        map.write('./map/map.png');
+        return map;
     }
 }
 
