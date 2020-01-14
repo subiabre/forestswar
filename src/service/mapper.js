@@ -17,12 +17,6 @@ class Mapper
          */
         this.gadm = 'https://gadm.org/img/480/gadm';
 
-        /**
-         * REST Countries API URI: \
-         * `https://restcountries.eu/rest/v2/alpha`
-         */
-        this.restcountries = 'http://restcountries.eu/rest/v2/alpha';
-
         this.setCountry(country);
     }
 
@@ -66,23 +60,11 @@ class Mapper
      */
     async fetchCountryArea(country = this.country)
     {
-        let http = require('http');
-        let api = this.restcountries + '/' + country;
+        let Country = require('./country');
+            country = new Country(country);
+            country = await country.get();
 
-        return new Promise((resolve, reject) => {
-            http.get(api, (REST) => {
-                var country = '';
-
-                REST.on('data', (data) => {
-                    country += data;
-                });
-
-                REST.on('end', () => {
-                    country = JSON.parse(country);
-                    resolve(country.area);
-                });
-            });
-        });
+        return country.area;
     }
 
     /**

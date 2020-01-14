@@ -122,13 +122,6 @@ class Deforestation
          * Mapper service internal instance
          */
         this.map = new Mapper();
-        
-
-        /**
-         * REST Countries API URI: \
-         * `https://restcountries.eu/rest/v2/alpha/col`
-         */
-        this.restcountries = 'http://restcountries.eu/rest/v2/alpha';
 
         this.console('BOT SERVICES SETUP');
     }
@@ -140,23 +133,11 @@ class Deforestation
      */
     async countryISO3(country)
     {
-        return new Promise((resolve, reject) => {
-            this.http.get(this.countries + '/' + country, (res) => {
-                let country = '';
+        let Country = require('./service/country');
+            country = new Country(Country);
+            country = await country.get();
 
-                res.on('data', (data) => {
-                    country += data;
-                });
-
-                res.on('end', () => {
-                    country = JSON.parse(country);
-
-                    resolve(country.alpha3Code);
-                });
-            }).on('error', (error) => {
-                reject(error);
-            });
-        });
+        return country.alpha3Code;
     }
 
     /**
