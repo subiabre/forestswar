@@ -109,13 +109,20 @@ class Deforestation
         this.http = require('http');
 
         this.countries = require('country-list');
-        this.countryToISO3 = require('country-iso-2-to-3');
+
+        let GLAD = require('./service/glad'),
+            Mapper = require('./service/mapper');
 
         /**
-         * Global Forests Watch API URI: \
-         * `http://production-api.globalforestwatch.org/glad-alerts`
+         * GLAD service internal instance
          */
-        this.gfw = 'http://production-api.globalforestwatch.org/glad-alerts';
+        this.glad = new GLAD();
+
+        /**
+         * Mapper service internal instance
+         */
+        this.map = new Mapper();
+        
 
         /**
          * REST Countries API URI: \
@@ -127,24 +134,29 @@ class Deforestation
     }
     
     /**
-     * Formats dates in a way that GFW API can understand
-     * @param {string} date Date string in any format
-     * @return {string} A string date
+     * Transform a country ISO2 code to ISO3
+     * @param {string} country Country ISO2 code
+     * @return {string} Country ISO3 code
      */
-    formatDate(date)
+    async countryISO3(country)
     {
-        return new Date(date).toISOString().split('T')[0];
-    }
+        return new Promise((resolve, reject) => {
+            this.http.get(this.countries + '/' + country, (res) => {
+                let country = '';
 
-    /**
-     * Formats a period of two dates that GFW API can understand
-     * @param {string} start Starting date
-     * @param {string} end Ending date
-     * @return {string} A string period dates between given date and current date
-     */
-    formatPeriod(start, end = new Date())
-    {
-        return '?period=' + this.formatDate(start) + ',' + this.formatDate(end);
+                res.on('data', (data) => {
+                    country += data;
+                });
+
+                res.on('end', () => {
+                    country = JSON.parse(country);
+
+                    resolve(country.alpha3Code);
+                });
+            }).on('error', (error) => {
+                reject(error);
+            });
+        });
     }
 
     /**
@@ -153,31 +165,57 @@ class Deforestation
     async routine()
     {
         // Recall last alert in database
-        let fromMemory = await this.fetchMemory();
-        this.fromMemoryDate = this.formatDate(fromMemory.dateIssued);
-        this.console('LAST ALERT DATE IS: ' + this.fromMemoryDate + ' (LOCAL AT ' + this.formatDate(fromMemory.dateLocal) + ')');
-
+        let fromMemory = await this.fetchMemory(),
+            dateMemory = this.glad.formatDate(fromMemory.dateIssued);
+        this.console('LAST ALERT DATE IS: ' + dateMemory + ' (LOCAL AT ' + this.glad.formatDate(fromMemory.dateLocal) + ')');
+        
         // Fetch last alert date
-        this.fromApiDate = await this.fetchLatest();
-        this.console('NEW ALERT DATE IS: ' + this.fromApiDate);
+        let dateLatest = await this.glad.getLatest();
+        this.console('NEW ALERT DATE IS: ' + this.glad.formatDate(dateLatest));
 
         // Compare alerts
-        if (this.compareDates(this.fromMemoryDate, this.fromApiDate)) {
+        if (this.compareDates(dateMemory, dateLatest)) {
             // Retrieve accumulated alerts data
-            this.console('FETCHING NEW ALERTS SINCE ' + this.fromMemoryDate);
-            let period = this.formatPeriod(this.fromMemoryDate);
-            let alerts = await this.fetchAlerts(period);
+            this.console('FETCHING NEW ALERTS SINCE ' + dateMemory);
+            
+            let period = this.glad.formatPeriod(dateMemory),
+                alerts = await this.glad.getAlerts(period, this.env.delay);
 
-            // Calc total area lost
+            this.console('AREA RESULT IS: ' + alerts);
+
+            // Save result to database
             this.console('STORING RESULT IN DATABASE');
-            let alertsArea = this.calcKms(alerts);
-            let alert = await this.newAlert(alertsArea, fromMemory);
+            
+            let alert = await this.newAlert(alerts, fromMemory, dateLatest);
 
-            // Make map
-            this.console('STARTING MAP SERVICE');
-            let alertArea = countryArea - alert.countryRemainingArea;
-            let map = await this.makeMap(alert.country, alertArea);
-            this.console('MAP SERVICE FINISHED');
+            // Make maps
+            this.console('MAP SERVICE STARTED');
+
+            let maps = new Array();
+            while (alert.countryStart <= alert.countryEnd) {
+                // If it's the very first map, ignore the area at end
+                if (alert.countryStart == 0) {
+                    alert.areaAtEnd = 0;
+                }
+
+                let paint = alert.areaAtEnd + alert.area;
+                
+                let country = this.countries.getCodes()[alert.countryStart];
+                    country = this.countryISO3(country);
+
+                this.map.setCountry(country);
+
+                let map = await this.map.paintArea(paint);
+                map.write('./map/' + country + '.png');
+                maps.push({
+                    map: map,
+                    alert: alert
+                });
+                
+                alert.areaAtEnd = 0;
+                alert.area -= await this.map.fetchCountryArea(country);
+                alert.countryStart++;
+            }
 
             // Update Twitter
         }
@@ -208,7 +246,7 @@ class Deforestation
 
                 if (!alert) {
                     alert = fakeAlert;
-                    this.persistAlert(alert);
+                    alert.save();
                 }
 
                 resolve(alert);
@@ -219,122 +257,62 @@ class Deforestation
     /**
      * Returns an alert object that actually doesn't exist to keep the routine going
      */
-    async fakeAlert()
+    fakeAlert()
     {
         let Alert = require('./models/alert');
         let dateIssued = this.env.startDate;
-        let country = this.countryToISO3(this.countries.getCodes()[0]);
-        let countryArea = await this.fetchCountryArea(country);
         
-        let alert = new Alert({
-            dateIssued: this.formatDate(dateIssued),
-            dateLocal: this.formatDate(new Date().toString()),
-            country: country,
-            countryRemainingArea: countryArea
+        return new Alert({
+            dateLocal: this.glad.formatDate(new Date()),
+            dateIssued: this.glad.formatDate(dateIssued)
         });
 
-        return new Promise((resolve, reject) => {
-            resolve(alert);
-        });
-    }
-
-    /**
-     * Save an alert record
-     * @param {object} data Object data of the alert model
-     */
-    async persistAlert(data)
-    {
-        let Alert = require('./models/alert');
-        let alert = new Alert(data);
-
-        return alert
-            .save()
-            .then((alert) => {
-                return alert
-            })
-            .catch((error) => {
-                this.console(error);
-                return error;
-            });
     }
 
     /**
      * Generates a new alert entity
      * @param {number} area Total area deforestated
-     * @param {object} fromMemory Previous alert entity in memory
+     * @param {object} memory Previous alert entity in memory
+     * @param {object|string} dateIssued Issue date of alert
      */
-    async newAlert(area, fromMemory)
+    async newAlert(area, memory, dateIssued)
     {
-        let areaTotal = fromMemory.area + area;
-        let countryArea = await this.fetchCountryArea(fromMemory.country);
-        let countryRemainingArea = countryArea - area - fromMemory.areaRemaining;
+        memory.dateLocal = this.glad.formatDate(new Date());
+        memory.dateIssued = this.glad.formatDate(dateIssued);
 
-        if (countryRemainingArea <= 0) {
-            var areaRemaining = Math.abs(countryRemainingArea); 
+        memory.area = area;
+        memory.areaTotal += area;
+
+        let countries = 0;
+        while (area > 0) {
+            let country = this.countries.getCodes()[memory.countryEnd + countries];
+                country = await this.map.fetchCountryArea(country);
+
+            if (area - country > 0) {
+                countries += 1;
+            }
+
+            memory.areaAtEnd = area;
+            area -= country;
         }
 
-        else {
-            var areaRemaining = 0;
-        }
+        memory.countryStart = memory.countryEnd;
+        memory.countryEnd = memory.countryStart + countries;
 
-        let alert = {
-            dateIssued: this.fromApiDate,
-            country: fromMemory.country,
-            countryRemainingArea: countryRemainingArea,
-            area: area,
-            areaRemaining: areaRemaining,
-            areaTotal: areaTotal
-        }
-
-        return this.persistAlert(alert);
-    }
-
-    /**
-     * Fetch the API to obtain the latest alert issued
-     * @return object Promise
-     */
-    async fetchLatest()
-    {
-        return new Promise((resolve, reject) => {
-            this.http.get(this.gfw + '/latest', (GLAD) => {
-                GLAD.on('data', (data) => {
-                    try {
-                        let alert = JSON.parse(data).data[0].attributes.date;
-
-                        resolve(alert);
-                    } catch (error) {
-                        reject(error);
-                    }
-                });
+        return memory
+            .save()
+            .then((alert) => {
+                return alert;
+            })
+            .catch((error) => {
+                return error;
             });
-        });
-    }
-
-    /**
-     * Get area of country from REST countries
-     * @param {string} country Country ISO3 code to be fetched 
-     */
-    async fetchCountryArea(country)
-    {
-        return new Promise((resolve, reject) => {
-            this.http.get(this.restcountries + '/' + country, (REST) => {
-                REST.on('data', (data) => {
-                    try {
-                        let country = JSON.parse(data).area;
-
-                        resolve(country);
-                    } catch (error) {
-                        reject(error);
-                    }
-                });
-            });
-        });
     }
 
     /**
      * Checks if two dates are different
-     * @param {string} date1 
-     * @param {string} date2 
+     * @param {object|string} date1 
+     * @param {object|string} date2 
      */
     compareDates(date1, date2)
     {
@@ -347,85 +325,6 @@ class Deforestation
 
         return false;
     }
-
-    /**
-     * Fetch the API for all the countries in any given time period
-     * @param {string} period Dates period to limit the API calls
-     */
-    async fetchAlerts(period)
-    {
-        return new Promise((resolve, reject) => {
-            let area = 0;
-            let errors = 0;
-            let start = new Date().getTime();
-
-            this.countries.getCodes().forEach((country, index) => {
-                country = this.countryToISO3(country);
-                let delay = this.env.delay * (index + 1);
-
-                // Add delay between calls to not saturate server
-                setTimeout(() => {
-                    this.http.get(this.gfw + '/admin/' + country + period, (GLAD) => {
-                        let alert;
-    
-                        GLAD.on('data', (data) => {
-                            try {
-                                alert = JSON.parse(data).data;
-                            } catch (error) {
-                                alert = null;
-                                errors++;
-                            }
-                        });
-    
-                        GLAD.on('end', () => {
-                            if (alert && alert.attributes.value > 0) {
-                                // Each alert value represents a pixel of 30m x 30m
-                                area += alert.attributes.value*30*30;
-                            }
-    
-                            if (index >= this.countries.getCodes().length - 1) {
-                                let time = (new Date().getTime() - start) / 1000;
-                                let calls = index + 1;
-
-                                area = this.calcKms(area);
-                                
-                                this.console('FETCHED ' + calls + ' COUNTRIES IN ' + time + 's');
-                                this.console('  ERRORS: ' + errors);
-                                this.console('  DELAY TIME: ' + (delay / 1000) + 's (' + this.env.delay + 'ms)');
-                                this.console('  LOST AREA IS: ' + area + 'km2');
-    
-                                resolve(area);
-                            }    
-                        });
-                    });
-                }, delay);
-            });
-        });
-    }
-
-    /**
-     * Calc the size of an area from square metres to kilometres
-     * @param {number} metres Square metres area 
-     * @return {number} Rounded up square kms
-     */
-    calcKms(metres)
-    {
-        return Math.round(metres / 1000000);
-    }
-
-    /**
-     * Make maps illustrating the deforestated area
-     * @param {string} country Country ISO3 code
-     * @param {*} area Country deforestated area In km2
-     */
-    async makeMap(country, area)
-    {
-        let Mapper = require('./service/mapper');
-        let map = new Mapper(country);
-
-        return await map.paintArea(area);
-    }
-
 }
 
 module.exports = Deforestation;
