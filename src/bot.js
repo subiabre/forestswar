@@ -177,20 +177,15 @@ class Deforestation
         if (this.compareDates(dateMemory, dateLatest)) {
             // Retrieve accumulated alerts data
             this.console('FETCHING NEW ALERTS SINCE ' + dateMemory);
-            
             let period = this.glad.formatPeriod(dateMemory),
                 alerts = await this.glad.getAlerts(period, this.env.delay);
 
-            this.console('AREA RESULT IS: ' + alerts);
-
             // Save result to database
             this.console('STORING RESULT IN DATABASE');
-            
             let alert = await this.newAlert(alerts, fromMemory, dateLatest);
 
             // Make maps
             this.console('MAP SERVICE STARTED');
-
             let maps = new Array();
             while (alert.countryStart <= alert.countryEnd) {
                 // If it's the very first map, ignore the area at end
