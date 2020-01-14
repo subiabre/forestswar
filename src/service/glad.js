@@ -13,6 +13,8 @@ class GLAD
          */
         this.api = 'http://production-api.globalforestwatch.org/glad-alerts';
 
+        this.countries = 'http://restcountries.eu/rest/v2/alpha'
+
         this.http = require('http');
     }
 
@@ -42,10 +44,25 @@ class GLAD
      * @param {string} country Country ISO2 code
      * @return {string} Country ISO3 code
      */
-    countryISO3(country)
+    async countryISO3(country)
     {
-        let ISO3 = require('country-iso-2-to-3');
-        return ISO3(country);
+        return new Promise((resolve, reject) => {
+            this.http.get(this.countries + '/' + country, (res) => {
+                let country = '';
+
+                res.on('data', (data) => {
+                    country += data;
+                });
+
+                res.on('end', () => {
+                    country = JSON.parse(country);
+
+                    resolve(country.alpha3Code);
+                });
+            }).on('error', (error) => {
+                reject(error);
+            });
+        });
     }
 
     /**
@@ -101,23 +118,22 @@ class GLAD
     {
         return new Promise((resolve, reject) => {
             let api = this.api + '/admin/' + country + period;
+            console.log(api);
 
-            this.http.get(api, (res) => {
+            this.http.get(api, async (res) => {
                 let alerts = '';
 
                 res.on('data', (data) => {
                     alerts += data;
                 });
 
-                res.on('end', () => {
+                res.on('end', async () => {
                     alerts = JSON.parse(alerts);
                     
-                    if (alerts.errors && alerts.errors.status == 500) {
-                        this.getAlertsCountry(country, period);
-                    }
-
                     if (alerts.errors) {
                         alerts = { data: { attributes: { value: 0 } } };
+
+                        console.log(alerts);
                     }
 
                     let area = this.alertsArea(alerts);
@@ -142,8 +158,8 @@ class GLAD
             let countryList = require('country-list');
             let alerts = 0;
 
-            countryList.getCodes().forEach((country, index) => {
-                country = this.countryISO3(country);
+            countryList.getCodes().forEach(async (country, index) => {
+                country = await this.countryISO3(country);
                 index = index + 1;
 
                 // Set delay to not overflow the server
