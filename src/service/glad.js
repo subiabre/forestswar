@@ -66,8 +66,8 @@ class GLAD
     }
 
     /**
-     * Get the area of alerts value
-     * @param {object} alert JSON object of alert 
+     * Calculate the alerts area in square kilometers
+     * @param {object} alert Alert object
      * @return {number} Number of square kilometers
      */
     alertsArea(alert)
@@ -118,7 +118,6 @@ class GLAD
     {
         return new Promise((resolve, reject) => {
             let api = this.api + '/admin/' + country + period;
-            console.log(api);
 
             this.http.get(api, async (res) => {
                 let alerts = '';
@@ -132,12 +131,9 @@ class GLAD
                     
                     if (alerts.errors) {
                         alerts = { data: { attributes: { value: 0 } } };
-
-                        console.log(alerts);
                     }
 
                     let area = this.alertsArea(alerts);
-
                     resolve(area);
                 });
             }).on('error', () => {
