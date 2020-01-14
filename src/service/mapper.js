@@ -140,7 +140,6 @@ class Mapper
             }
         }
 
-        map.write('./map/map.png');
         return map;
     }
 }
