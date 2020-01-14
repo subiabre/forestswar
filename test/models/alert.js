@@ -25,18 +25,19 @@ describe ('Model: alert', () => {
         done();
     });
 
-    it ('should have selected country code', (done) => {
+    it ('should have start country index', (done) => {
         var alert = new Alert();
 
-        assert.isDefined(alert.country);
+        assert.isDefined(alert.countryStart);
+        assert.isNumber(alert.countryStart);
         done();
     });
 
-    it ('should have country remaining area', (done) => {
+    it ('should have end country index', (done) => {
         var alert = new Alert();
 
-        assert.isDefined(alert.countryRemainingArea);
-        assert.isNumber(alert.countryRemainingArea);
+        assert.isDefined(alert.countryEnd);
+        assert.isNumber(alert.countryEnd);
         done();
     });
 
@@ -51,8 +52,8 @@ describe ('Model: alert', () => {
     it ('should have have remaining deforestated area', (done) => {
         var alert = new Alert();
 
-        assert.isDefined(alert.areaRemaining);
-        assert.isNumber(alert.areaRemaining);
+        assert.isDefined(alert.areaAtEnd);
+        assert.isNumber(alert.areaAtEnd);
         done();
     });
 

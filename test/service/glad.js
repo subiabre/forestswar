@@ -41,7 +41,7 @@ describe('Service: GLAD', () => {
         
         var glad = new GLAD();
         var period = glad.formatPeriod('2019-01-01', '2019-12-31');
-        var alerts = await glad.getAlerts(period);
+        var alerts = await glad.getAlerts(period, 100);
 
         assert.isNumber(alerts);
     });
