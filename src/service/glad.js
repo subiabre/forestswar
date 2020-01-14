@@ -152,6 +152,7 @@ class GLAD
     {
         return new Promise((resolve, reject) => {
             let countryList = require('country-list');
+            let countries = countryList.getCodes().length;
             let alerts = 0;
 
             countryList.getCodes().forEach(async (country, index) => {
@@ -162,12 +163,26 @@ class GLAD
                 setTimeout(async () => {
                     alerts += await this.getAlertsCountry(country, period);
 
-                    if (index >= countryList.getCodes().length) {
+                    this.consoleUpdate('PROCESSED: ' + index + '/' + countries + '. AREA: ' + alerts);
+
+                    if (index > countries -1) {
+                        console.log();
                         resolve(alerts);
                     }
+
                 }, delay * (index));
             });
         });
+    }
+
+    /**
+     * Update console log
+     * @param {number} message Message to be updated 
+     */
+    consoleUpdate(message){
+        process.stdout.clearLine();
+        process.stdout.cursorTo(0);
+        process.stdout.write(message);
     }
 }
 
