@@ -1,2 +1,6 @@
+# NPM
 node_modules
+.log
+
+# App env
 .env
