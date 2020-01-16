@@ -63,3 +63,26 @@ This project uses [Mocha](https://mochajs.org/) as testing framework:
 ```console
 $ npm test
 ```
+
+## Using the bot as standalone
+This package can be used to generate maps and obtain deforestation data without using the Twitter service.
+
+Firstly, you should disable the Twitter flag from your `.env`.
+
+To use the bot services as you please, you can simply play with them: **all the code is well documented** and commented, so it shouldn't be a big hassle to get the bot to do what you want.
+
+Take this example on how to generate a map of your desired country in the desired time period:
+```js
+const Deforestation = require('./src/bot');
+const bot = new Deforestation();
+
+let period = bot.glad.formatPeriod('2015-01-01', '2015-12-31');
+let country = 'ESP'; // Spain
+
+async () => {
+    let area = await bot.glad.getAlerts(period); // Get the deforestated are for our period
+    let map = await bot.map.paintArea(area); // Draw a map with the obtained area
+
+    map.write('./map/map.png'); // Save the resulting map to map/map.png
+}
+``` 
