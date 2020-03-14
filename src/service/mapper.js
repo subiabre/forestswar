@@ -31,27 +31,19 @@ class Mapper
     }
 
     /**
-     * Obtain an image map from GADM and process it with replace-color module
+     * Obtain an image map from GADM
      */
     async fetchGADM()
     {
-        let replaceColor = require('replace-color');
+        let Jimp = require('jimp');
 
-        return replaceColor({
-            image: this.image,
-            colors: {
-                type: 'hex',
-                // Paint the sea in blue
-                targetColor: '#ffffff',
-                replaceColor: '#99CCFF'
-            }
-        })
-        .then((jimp) => {
-            return jimp;
-        })
-        .catch((error) => {
-            return error;
-        });
+        return Jimp.read(this.image)
+            .then(map => {
+                return map;
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     /**
