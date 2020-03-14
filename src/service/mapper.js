@@ -23,11 +23,14 @@ class Mapper
     /**
      * Set the mapper country code
      * @param {string} country Country ISO3 code 
+     * @returns {self}
      */
     setCountry(country)
     {
         this.country = country;
         this.image = this.gadm + '/' + country + '/' + country + '.png';
+
+        return this;
     }
 
     /**
