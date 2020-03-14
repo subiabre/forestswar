@@ -19,7 +19,7 @@ describe('Service: mapper', () => {
 
         var mapper = new Mapper('AND');
         var Jimp = require('jimp');
-        var map = await mapper.paintArea(400);
+        var map = await mapper.paintArea(400, '#19191F');
 
         assert.isObject(map);
         assert.exists(map.bitmap);
