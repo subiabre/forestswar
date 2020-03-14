@@ -184,9 +184,9 @@ class Deforestation
             var message = `${area}km2 deforestated, ${area - memory.area} since the last update.`;
 
             if (country.area < area) {
-                let countries = this.countries.getCodes().length;
-                
                 memory.country += 1;
+
+                let countries = this.countries.getCodes().length - memory.country;
                 message = `${country.name} has disappeared. ${countries} countries remaining.`
             }
 
