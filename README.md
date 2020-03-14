@@ -10,24 +10,28 @@ You've probably read many times various comparisons like *"an area the size of X
 
 Follow it on [Twitter](https://twitter.com/ForestsWar) and start understanding just how much forest area is deforestated.
 
-### How does it work?
-This bot has an internal database that keeps track of [GLAD alerts](https://glad.umd.edu/projects/global-forest-watch). Everytime a new alert is issued, the bot calculates the area lost, updates it's database, creates a map to illustrate it and updates the Twitter feed.
+**If you think this project is important, please spread the word about it**, share the Twitter page with your friends and family. If you think this project could be improved you are welcome to add contributions via Pull Requests.
 
-Maps are approximate size comparison of deforestated area against a country from the [country-list](https://www.npmjs.com/package/country-list) package. When the whole area of a country has been lost to deforestation, the bot goes on to the next country in the list.
+### How does it work?
+This bot has an internal database that keeps track of deforestated area thanks to [GLAD alerts](https://glad.umd.edu/projects/global-forest-watch). Everytime the bot is run, it fetches the total area deforestated since january 1st 2015 and the current date, then it compares the area to the area of a country.
+
+Maps are pixel exact size comparisons of deforestated area against a country from the [country-list](https://www.npmjs.com/package/country-list) package. When the whole area of a country has been lost to deforestation, the bot goes on to the next country in the list.
 
 This process may take years. Hopefully more than it takes to recover the deforestated area.
 
 ### Why is this important?
 Main concern for deforestation is that replanting and recovering forest biomass takes years, if not decades.
 
-This bot aims to factually know the rate at which we exploit forests' resources and make it easy to understand and accessible for anyone who is interested. 
+This bot aims to factually know the rate at which we exploit forests' resources and make the data accessible and easy to understand for anyone who is interested. 
 
 >All data displayed is retrieved from third party services. This bot **does not** generate, manipulate or destroy any data about deforestation.
 
 ### How is deforestated area calculated?
 The [GLAD](https://glad.umd.edu/projects/global-forest-watch) laboratory keeps a public dataset of tree cover change based on Landsat satellite imagery.
 
-[Global Forest Watch](https://www.globalforestwatch.org/) puts it in a easy to use, updated [API](http://production-api.globalforestwatch.org/).
+[Global Forest Watch](https://www.globalforestwatch.org/) puts it in a easy to use, updated [API](http://production-api.globalforestwatch.org/). Although it could work a little bit better.
+
+For implementation details check the `GLAD` service.
 
 ### How are maps done?
 [GADM](https://gadm.org/) provides a nice set of clean map images by country.
@@ -42,7 +46,7 @@ For implementation details check the `Mapper` service.
 Before anything you'll need to have [Node.js](https://nodejs.org) and [npm](http://npmjs.com) installed. Then:
 
 ```console
-$ git clone https://gitlab.com/subiabre/deforestation.git
+$ git clone https://github.com/subiabre/deforestation.git
 $ cd deforestation
 $ npm install
 ```
@@ -63,12 +67,12 @@ This project uses [Mocha](https://mochajs.org/) as testing framework:
 $ npm test
 ```
 
-## Using the bot as standalone
-This package can be used to generate maps and obtain deforestation data without using the Twitter service.
+## Using the bot services as standalone
+This package can be used to generate maps and obtain deforestation data independently of the bot behaviour.
 
 First, you should disable the Twitter flag from your `.env`.
 
-To use the bot services as you please, you can simply play with them: **all the code is well documented** and commented, so it shouldn't be a big hassle to get the bot to do what you want.
+To use the bot services as you please, you can simply play with them: **all the code is well documented** and commented, so it shouldn't be a big hassle to get the bot to do what you want. All the services are detached from the bot and should work fine independently.
 
 Take this example on how to generate a map of your desired country in the desired time period:
 ```js
