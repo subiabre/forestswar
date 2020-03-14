@@ -123,6 +123,14 @@ class Deforestation
         let GLAD = require('./service/glad'),
             Mapper = require('./service/mapper');
 
+        let fs = require('fs'),
+        fileList = fs.readFileSync('src/list.json');
+    
+        /**
+         * Countries list
+         */
+        this.list = JSON.parse(fileList);
+
         /**
          * GLAD service internal instance
          */
@@ -155,13 +163,13 @@ class Deforestation
 
         // Obtain country code and data
         let Country = require('./service/country'),
-            countryCode = this.countries.getCodes()[memory.country],
-            country = new Country(countryCode);
-
-        country = await country.get()
-        this.console(`COUNTRY IS: ${country.name}.`);
+            data = new Country(),
+            list = this.list[memory.country],
+            country = await data.getByName(list.country);
+        this.console(`COUNTRY IS: ${list.country}.`);
 
         // Fetch GLAD
+        this.console('FETCHING FROM GLAD API.');
         let period = this.glad.formatPeriod(this.env.startDate);
         let area = await this.glad.getAlerts(period, this.env.delay);
         this.console(`DEFORESTATED AREA IS: ${area}.`);
@@ -169,9 +177,13 @@ class Deforestation
         if (area > memory.area) {
             this.console(`BOT MEMORY OUTDATED.`);
 
+            // Get deforestated area in comparison to country forest area
+            let ratio = area * 100 / list.area,
+                deforestation = ratio * country.area / 100;
+            
             // Get map with deforestated area
             let map = await this.map.setCountry(country.alpha3Code).
-                paintArea(area, this.env.deforestatedColor);
+                paintArea(deforestation, this.env.deforestatedColor);
             this.console('GENERATED MAP.');
 
             // Write message
@@ -180,8 +192,8 @@ class Deforestation
             if (country.area < area) {
                 memory.country += 1;
 
-                let countries = this.countries.getCodes().length - memory.country;
-                message = `${area}km2 deforestated, ${country.name} has disappeared. ${countries} countries remaining.`
+                let countries = this.list.length - memory.country;
+                message = `${area}km2 deforestated, ${list.country} has been deforestated. ${countries} countries remaining.`;
             }
 
             this.updateTwitter(map, message);
