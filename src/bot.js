@@ -78,7 +78,9 @@ class Deforestation
 
             delay: process.env.DELAY_MS || 400,
 
-            startDate: process.env.START_DATE
+            startDate: process.env.START_DATE,
+
+            deforestatedColor: process.env.DEFORESTATED_COLOR
         }
 
         // Start empty log
@@ -166,8 +168,8 @@ class Deforestation
 
         if (area > memory.area) {
             // Get map with deforestated area
-            let map = await this.map.setCountry(country.alpha3Code).paintArea(area, '#bf0c0f');
-            map.write(`map/${countryCode}.png`);
+            let map = await this.map.setCountry(country.alpha3Code).
+                paintArea(area, this.env.deforestatedColor);
 
             // Write message
             var message = `${area}km2 deforestated, ${area - memory.area} since the last update.`;
