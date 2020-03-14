@@ -167,9 +167,12 @@ class Deforestation
         this.console(`DEFORESTATED AREA IS: ${area}.`);
 
         if (area > memory.area) {
+            this.console(`BOT MEMORY OUTDATED.`);
+
             // Get map with deforestated area
             let map = await this.map.setCountry(country.alpha3Code).
                 paintArea(area, this.env.deforestatedColor);
+            this.console('GENERATED MAP.');
 
             // Write message
             var message = `${area}km2 deforestated, ${area - memory.area} since the last update.`;
