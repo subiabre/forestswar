@@ -47,7 +47,7 @@ class Deforestation
     {
         return {
             statusDate: new Date(),
-            botLog: this.consoleLog,
+            log: this.consoleLog,
         }
     }
 
@@ -89,15 +89,6 @@ class Deforestation
      */
     loadServices()
     {
-        this.mongoose = require('mongoose');
-        this.mongoose.connect(
-            this.env.database,
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            }
-        );
-
         let Twitter = require('twitter');
         this.twitter = new Twitter({
             consumer_key: this.env.twitter.consumerKey,
