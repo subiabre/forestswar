@@ -46,8 +46,10 @@ class Deforestation
     getLog()
     {
         return {
-            statusDate: new Date(),
-            log: this.consoleLog,
+            "status": {
+                "date": new Date(),
+                "log": this.consoleLog,
+            }
         }
     }
 
@@ -69,7 +71,8 @@ class Deforestation
                 accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
             },
 
-            database: process.env.DATABASE_URL,
+            database: process.env.DATABASE,
+            databaseUrl: process.env.DATABASE_URL,
 
             logging: process.env.LOGGING,
 
@@ -89,6 +92,17 @@ class Deforestation
      */
     loadServices()
     {
+        if (this.env.database) {
+            this.mongoose = require('mongoose');
+            this.mongoose.connect(
+                this.env.databaseUrl,
+                {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                }
+            );
+        }
+        
         let Twitter = require('twitter');
         this.twitter = new Twitter({
             consumer_key: this.env.twitter.consumerKey,
@@ -136,144 +150,8 @@ class Deforestation
      */
     async routine()
     {
-        // Recall last alert in database
-        let fromMemory = await this.fetchMemory(),
-            dateMemory = this.glad.formatDate(fromMemory.dateIssued);
-        this.console('LAST ALERT DATE IS: ' + dateMemory + ' (LOCAL AT ' + this.glad.formatDate(fromMemory.dateLocal) + ')');
+        // Fetch memory file
         
-        // Fetch last alert date
-        let dateLatest = await this.glad.getLatest();
-        this.console('NEW ALERT DATE IS: ' + this.glad.formatDate(dateLatest));
-
-        // Compare alerts
-        if (this.compareDates(dateMemory, dateLatest)) {
-            // Retrieve accumulated alerts data
-            this.console('FETCHING NEW ALERTS SINCE ' + dateMemory);
-            let period = this.glad.formatPeriod(dateMemory),
-                alerts = await this.glad.getAlerts(period, this.env.delay);
-
-            // Save result to database
-            this.console('STORING RESULT IN DATABASE');
-            let alert = await this.newAlert(alerts, fromMemory, dateLatest);
-
-            // Make maps
-            this.console('MAP SERVICE STARTED');
-            let maps = new Array();
-            while (alert.countryStart <= alert.countryEnd) {
-                // If it's the very first map, ignore the area at end
-                if (alert.countryStart == 0) {
-                    alert.areaAtEnd = 0;
-                }
-
-                let paint = alert.areaAtEnd + alert.area;
-                
-                let country = this.countries.getCodes()[alert.countryStart];
-                    country = this.countryISO3(country);
-
-                this.map.setCountry(country);
-
-                let map = await this.map.paintArea(paint);
-                map.write('./map/' + country + '.png');
-                maps.push({
-                    map: map,
-                    alert: alert
-                });
-                
-                alert.areaAtEnd = 0;
-                alert.area -= await this.map.fetchCountryArea(country);
-                alert.countryStart++;
-            }
-
-            // Update Twitter
-        }
-
-        else {
-            this.console('NO NEW UPDATES TO FETCH');
-        }
-
-        this.console('BOT ROUTINE FINISHED.');
-    }
-
-    /**
-     * Obtain the latest alert stored in memory
-     * @return object Promise
-     */
-    async fetchMemory()
-    {
-        let fakeAlert = await this.fakeAlert();
-
-        return new Promise((resolve, reject) => {
-            let Alert = require('./models/alert');
-
-            Alert.findOne({}, {}, { sort: { 'dateIssued': -1 } }, (error, alert) => {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-
-                if (!alert) {
-                    alert = fakeAlert;
-                    alert.save();
-                }
-
-                resolve(alert);
-            });
-        });
-    }
-
-    /**
-     * Returns an alert object that actually doesn't exist to keep the routine going
-     */
-    fakeAlert()
-    {
-        let Alert = require('./models/alert');
-        let dateIssued = this.env.startDate;
-        
-        return new Alert({
-            dateLocal: this.glad.formatDate(new Date()),
-            dateIssued: this.glad.formatDate(dateIssued)
-        });
-
-    }
-
-    /**
-     * Generates a new alert entity
-     * @param {number} area Total area deforestated
-     * @param {object} memory Previous alert entity in memory
-     * @param {object|string} dateIssued Issue date of alert
-     */
-    async newAlert(area, memory, dateIssued)
-    {
-        memory.dateLocal = this.glad.formatDate(new Date());
-        memory.dateIssued = this.glad.formatDate(dateIssued);
-
-        memory.area = area;
-        memory.areaTotal += area;
-
-        let countries = 0;
-        while (area > 0) {
-            let country = this.countries.getCodes()[memory.countryEnd + countries];
-                country = await this.map.fetchCountryArea(country);
-
-            if (area - country > 0) {
-                countries += 1;
-            }
-
-            memory.areaAtEnd = area;
-            area -= country;
-        }
-
-        memory.countryStart = memory.countryEnd;
-        memory.countryEnd = memory.countryStart + countries;
-
-        return memory
-            .save()
-            .then((alert) => {
-                return alert;
-            })
-            .catch((error) => {
-                return error;
-            });
     }
 
     /**
