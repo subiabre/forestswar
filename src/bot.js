@@ -100,7 +100,10 @@ class Deforestation
                     useNewUrlParser: true,
                     useUnifiedTopology: true
                 }
-            );
+            ).catch(error => {
+                this.console(error);
+                return;
+            });
         }
         
         let Twitter = require('twitter');
@@ -129,20 +132,6 @@ class Deforestation
         this.map = new Mapper();
 
         this.console('BOT SERVICES SETUP');
-    }
-    
-    /**
-     * Transform a country ISO2 code to ISO3
-     * @param {string} country Country ISO2 code
-     * @return {string} Country ISO3 code
-     */
-    async countryISO3(country)
-    {
-        let Country = require('./service/country');
-            country = new Country(Country);
-            country = await country.get();
-
-        return country.alpha3Code;
     }
 
     /**
