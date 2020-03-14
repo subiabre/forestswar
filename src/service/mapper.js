@@ -85,7 +85,7 @@ class Mapper
      * @param {number} area Deforestated area
      * @param {hex} color Deforestated area color
      */
-    async paintArea(area, color)
+    async paintArea(area, color = '#f60b2a')
     {
         let Jimp = require('jimp');
         let map = await this.fetchGADM();
