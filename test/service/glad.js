@@ -35,14 +35,4 @@ describe('Service: GLAD', () => {
         
         assert.isNumber(alerts);
     });
-
-    it ('should fetch alerts from all countries', async function() {
-        this.timeout(101000);
-        
-        var glad = new GLAD();
-        var period = glad.formatPeriod('2019-01-01', '2019-12-31');
-        var alerts = await glad.getAlerts(period, 100);
-
-        assert.isNumber(alerts);
-    });
 });
