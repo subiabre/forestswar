@@ -150,25 +150,122 @@ class Deforestation
      */
     async routine()
     {
-        // Fetch memory file
+        this.console('BOT ROUTINE STARTED.');
+
+        if (!this.env.database) {
+            this.console('DATABASE IS REQUIRED TO INIT THE ROUTINE.');
+            
+            return;
+        }
         
+        // Fetch memory
+        let memory = await this.getMemory();
+        this.console('MEMORY READ: OK.');
+
+        // Obtain country code and data
+        let Country = require('./service/country'),
+            countryCode = this.countries.getCodes()[memory.country],
+            country = new Country(countryCode);
+
+        country = await country.get()
+        this.console(`COUNTRY IS: ${country.name}.`);
+
+        // Fetch GLAD
+        let period = this.glad.formatPeriod(this.env.startDate);
+        let area = await this.glad.getAlerts(period, this.env.delay);
+        this.console(`DEFORESTATED AREA IS: ${area}.`);
+
+        if (area > memory.area) {
+            // Get map with deforestated area
+            let map = await this.map.setCountry(country.alpha3Code).paintArea(area);
+            map.write(`map/${countryCode}.png`);
+
+            // Write message
+            var message = `${area}km2 deforestated, ${area - memory.area} since the last update.`;
+
+            if (country.area < area) {
+                let countries = this.countries.getCodes().length;
+                
+                memory.country += 1;
+                message = `${country.name} has disappeared. ${countries} countries remaining.`
+            }
+
+            this.updateTwitter(map, message);
+            
+            let Memory = require('./model/memory'),
+                newMemory = new Memory({
+                date: this.glad.formatDate(new Date()),
+                country: memory.country,
+                area: area
+            });
+
+            newMemory.save();
+            this.console('BOT MEMORY UPDATED.');
+        }
+
+        this.console('BOT ROUTINE FINISHED.');
+        return;
     }
 
     /**
-     * Checks if two dates are different
-     * @param {object|string} date1 
-     * @param {object|string} date2 
+     * Obtain the last memory record
+     * @returns {object} Mongoose promise
      */
-    compareDates(date1, date2)
+    getMemory()
     {
-        date1 = new Date(date1).getTime();
-        date2 = new Date(date2).getTime();
+        return new Promise((resolve, reject) => {
+            let Memory = require('./model/memory'),
+                sorting = { sort: { '_id': -1 } };
 
-        if (date1 < date2) {
-            return true;
+            Memory.findOne({}, {}, sorting, (error, memory) => {
+                if (error) {
+                    reject(error);
+                }
+
+                if (!memory) {
+                    memory = new Memory({
+                        date: this.glad.formatDate(new Date()),
+                        country: 0,
+                        area: 0
+                    });
+
+                    memory.save();
+                    resolve(memory);
+                }
+
+                resolve(memory);
+            });
+        });
+    }
+    
+    /**
+     * Posts to twitter
+     * @param {object} map Mapper map object
+     * @param {string} message Message to be published
+     */
+    async updateTwitter(map, message)
+    {
+        let image = await map.getBufferAsync('image/jpeg'),
+            params = {media: image};
+
+        if (this.env.twitter.on) {
+            this.twitter.post('media/upload', params, (err, data, res) => {
+                if (err) {
+                    this.console(err);
+                    return;
+                }
+    
+                params = {status: message, media_ids: data.media_id_string};
+                this.twitter.post('statuses/update', params, (err, data, res) => {
+                    if (err) {
+                        this.console(err);
+                        return;
+                    }
+    
+                    this.console('TWITTER FEED UPDATED.');
+                });
+            });
         }
-
-        return false;
     }
 }
 
