@@ -166,7 +166,7 @@ class Deforestation
 
         if (area > memory.area) {
             // Get map with deforestated area
-            let map = await this.map.setCountry(country.alpha3Code).paintArea(area);
+            let map = await this.map.setCountry(country.alpha3Code).paintArea(area, '#bf0c0f');
             map.write(`map/${countryCode}.png`);
 
             // Write message
@@ -176,7 +176,7 @@ class Deforestation
                 memory.country += 1;
 
                 let countries = this.countries.getCodes().length - memory.country;
-                message = `${country.name} has disappeared. ${countries} countries remaining.`
+                message = `${area}km2 deforestated, ${country.name} has disappeared. ${countries} countries remaining.`
             }
 
             this.updateTwitter(map, message);
