@@ -27,7 +27,7 @@ class Country
     {
         return new Promise((resolve, reject) => {
             this.http.get(this.api + endpoint + '/' + countryId, (res) => {
-
+                
                 let country = '';
 
                 res.on('data', (data) => {
@@ -52,7 +52,8 @@ class Country
      */
     async getByName(country)
     {
-        return await this.get('name', country);
+        let data = await this.get('name', country);
+        return data[0];
     }
 
     /**
@@ -62,7 +63,8 @@ class Country
      */
     async getByCode(country)
     {
-        return await this.get('alpha', country);
+        let data = await this.get('alpha', country);
+        return data;
     }
 }
 
