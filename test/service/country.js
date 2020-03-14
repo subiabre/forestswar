@@ -6,8 +6,8 @@ var Country = require('../../src/service/country'),
 
 describe('Service: country', () => {
     it ('should fetch country data', async function() {
-        var country = new Country('ESP'),
-            country = await country.get();
+        var country = new Country(),
+            country = await country.getByCode('ESP');
 
         assert.isObject(country);
         assert.exists(country.area);
