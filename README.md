@@ -1,4 +1,3 @@
-# Deforestation
 A bot to help visualize deforestation. Inspired by [a friend's one](https://gitlab.com/wishiwasrubin/fwbot).
 
 [![time tracker](https://wakatime.com/badge/gitlab/subiabre/deforestation.svg)](https://wakatime.com/badge/gitlab/subiabre/deforestation)
@@ -9,7 +8,7 @@ A bot to help visualize deforestation. Inspired by [a friend's one](https://gitl
 ## Tracking and mapping deforestation
 You've probably read many times various comparisons like *"an area the size of X football fields is lost every Y time"*, and while said data might be true, it's often hard to actually picture how much deforestation happens in our planet. This bot aims to make it easier.
 
-Follow it on [Twitter](https://twitter.com/DeforestationWr) and start understanding just how much forest area is deforestated.
+Follow it on [Twitter](https://twitter.com/ForestsWar) and start understanding just how much forest area is deforestated.
 
 ### How does it work?
 This bot has an internal database that keeps track of [GLAD alerts](https://glad.umd.edu/projects/global-forest-watch). Everytime a new alert is issued, the bot calculates the area lost, updates it's database, creates a map to illustrate it and updates the Twitter feed.
@@ -40,7 +39,7 @@ The [GLAD](https://glad.umd.edu/projects/global-forest-watch) laboratory keeps a
 For implementation details check the `Mapper` service.
 
 ## How to setup in local environment
-Before anything you'll need to have [Node.js](https://nodejs.org), [npm](http://npmjs.com) and [MongoDB](https://www.mongodb.com) installed.
+Before anything you'll need to have [Node.js](https://nodejs.org) and [npm](http://npmjs.com) installed. Then:
 
 ```console
 $ git clone https://gitlab.com/subiabre/deforestation.git
@@ -67,22 +66,23 @@ $ npm test
 ## Using the bot as standalone
 This package can be used to generate maps and obtain deforestation data without using the Twitter service.
 
-Firstly, you should disable the Twitter flag from your `.env`.
+First, you should disable the Twitter flag from your `.env`.
 
 To use the bot services as you please, you can simply play with them: **all the code is well documented** and commented, so it shouldn't be a big hassle to get the bot to do what you want.
 
 Take this example on how to generate a map of your desired country in the desired time period:
 ```js
 const Deforestation = require('./src/bot');
-const bot = new Deforestation();
+const deforestation = new Deforestation();
 
-let period = bot.glad.formatPeriod('2015-01-01', '2015-12-31');
+let period = deforestation.glad.formatPeriod('2015-01-01', '2015-12-31');
 let country = 'ESP'; // Spain
 
-async () => {
-    let area = await bot.glad.getAlerts(period); // Get the deforestated are for our period
-    let map = await bot.map.paintArea(area); // Draw a map with the obtained area
+// Get the deforestated area for our period
+let area = await deforestation.glad.getAlerts(period);
+// Draw a map with the obtained area
+let map = await bot.map.paintArea(area);
 
-    map.write('./map/map.png'); // Save the resulting map to map/map.png
-}
+// Save the resulting map to map/map.png
+map.write('./map/map.png');
 ``` 
