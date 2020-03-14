@@ -44,9 +44,9 @@ class GLAD
      */
     async countryISO3(country)
     {
-        let Country = require('./country');
-            country = new Country(country);
-            country = await country.get();
+        let Country = require('./country'),
+            data = new Country();
+            country = await data.getByCode(country);
 
         return country.alpha3Code;
     }
