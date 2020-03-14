@@ -75,13 +75,12 @@ Take this example on how to generate a map of your desired country in the desire
 const Deforestation = require('./src/bot');
 const deforestation = new Deforestation();
 
-let period = deforestation.glad.formatPeriod('2015-01-01', '2015-12-31');
-let country = 'ESP'; // Spain
-
 // Get the deforestated area for our period
+let period = deforestation.glad.formatPeriod('2015-01-01', '2015-12-31');
 let area = await deforestation.glad.getAlerts(period);
+
 // Draw a map with the obtained area
-let map = await bot.map.paintArea(area);
+let map = await deforestation.map.setCountry('ESP').paintArea(area);
 
 // Save the resulting map to map/map.png
 map.write('./map/map.png');
