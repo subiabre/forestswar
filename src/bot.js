@@ -187,13 +187,17 @@ class Deforestation
             this.console('GENERATED MAP.');
 
             // Write message
-            var message = `${area}km2 deforestated, ${area - memory.area} since the last update.`;
+            let kilometers = area.toLocaleString(),
+                difference = area - memory.area,
+                lost = difference.toLocaleString();
+                
+            var message = `${kilometers}km² deforestated, ${lost} since the last update.`;
 
             if (country.area < area) {
                 memory.country += 1;
 
                 let countries = this.list.length - memory.country;
-                message = `${area}km2 deforestated, ${list.country} has been deforestated. ${countries} countries remaining.`;
+                message = `${kilometers}km² deforestated, ${list.country} has been deforestated. ${countries} countries remaining.`;
             }
 
             this.updateTwitter(map, message);
