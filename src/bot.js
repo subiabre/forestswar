@@ -166,7 +166,7 @@ class Deforestation
             data = new Country(),
             list = this.list[memory.country],
             country = await data.getByCode(list.code);
-        this.console(`COUNTRY IS: ${list.country}.`);
+        this.console(`COUNTRY IS: ${list.name}.`);
 
         // Fetch GLAD
         this.console('FETCHING FROM GLAD API.');
