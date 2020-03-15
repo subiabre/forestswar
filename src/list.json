@@ -1,194 +1,962 @@
 [
-    { "country": "Suriname", "area": 147760  },
-    { "country": "Micronesia", "area": 630  },
-    { "country": "Seychelles", "area": 407  },
-    { "country": "Tuvalu", "area": 23  },
-    { "country": "Palau", "area": 400  },
-    { "country": "Gabon", "area": 227517  },
-    { "country": "Mozambique", "area": 620000  },
-    { "country": "Solomon Islands", "area": 22534  },
-    { "country": "North Korea", "area": 76240  },
-    { "country": "Finland", "area": 233320  },
-    { "country": "Belize", "area": 16530  },
-    { "country": "Laos", "area": 170000  },
-    { "country": "Bhutan", "area": 24764  },
-    { "country": "Guyana", "area": 151040  },
-    { "country": "Sweden", "area": 280730  },
-    { "country": "Japan", "area": 253203  },
-    { "country": "Zimbabwe", "area": 259267  },
-    { "country": "Congo", "area": 224710  },
-    { "country": "Dominica", "area": 488  },
-    { "country": "Myanmar", "area": 430560  },
-    { "country": "Papua New Guinea", "area": 294370  },
-    { "country": "South Korea", "area": 63346  },
-    { "country": "Bosnia and Herzegovina", "area": 32315  },
-    { "country": "Slovenia", "area": 12574  },
-    { "country": "Brazil", "area": 5173689  },
-    { "country": "Estonia", "area": 23066  },
-    { "country": "Honduras", "area": 67254  },
-    { "country": "Latvia", "area": 38755  },
-    { "country": "Taiwan", "area": 21588  },
-    { "country": "Malaysia", "area": 195200  },
-    { "country": "Equatorial Guinea", "area": 16320  },
-    { "country": "Guinea-Bissau", "area": 20720  },
-    { "country": "Panama", "area": 42940  },
-    { "country": "Benin", "area": 61860  },
-    { "country": "Fiji", "area": 10000  },
-    { "country": "Timor-Leste", "area": 7980  },
-    { "country": "Peru", "area": 687420  },
-    { "country": "Bolivia", "area": 587400  },
-    { "country": "Colombia", "area": 607280  },
-    { "country": "Venezuela", "area": 471378  },
-    { "country": "Cambodia", "area": 93350  },
-    { "country": "Bahamas", "area": 5150  },
-    { "country": "Guatemala", "area": 108894  },
-    { "country": "DR Congo", "area": 1172704  },
-    { "country": "Zambia", "area": 376309  },
-    { "country": "Russia", "area": 8149300  },
-    { "country": "Brunei", "area": 2780  },
-    { "country": "Angola", "area": 591040  },
-    { "country": "Austria", "area": 39600  },
-    { "country": "Indonesia", "area": 884950 },
-    { "country": "Paraguay", "area": 184750  },
-    { "country": "Montenegro", "area": 6252  },
-    { "country": "Cameroon", "area": 212450  },
-    { "country": "Senegal", "area": 86730  },
-    { "country": "Trinidad and Tobago", "area": 2260  },
-    { "country": "Croatia", "area": 24901  },
-    { "country": "Liechtenstein", "area": 70  },
-    { "country": "Gambia", "area": 4857  },
-    { "country": "Ecuador", "area": 115510  },
-    { "country": "Georgia", "area": 28577  },
-    { "country": "Slovakia", "area": 20006  },
-    { "country": "Costa Rica", "area": 20440  },
-    { "country": "North Macedonia", "area": 10285  },
-    { "country": "Nicaragua", "area": 51890  },
-    { "country": "Belarus", "area": 80334  },
-    { "country": "Sierra Leone", "area": 27540  },
-    { "country": "Norway", "area": 121120  },
-    { "country": "Tanzania", "area": 352570  },
-    { "country": "Vietnam", "area": 123000  },
-    { "country": "Samoa", "area": 1050  },
-    { "country": "France", "area": 246640  },
-    { "country": "Spain", "area": 184180  },
-    { "country": "Vanuatu", "area": 4470  },
-    { "country": "Central African Republic", "area": 227550  },
-    { "country": "Mexico", "area": 710000  },
-    { "country": "Italy", "area": 106736  },
-    { "country": "Portugal", "area": 31820  },
-    { "country": "Andorra", "area": 160  },
-    { "country": "Canada", "area": 4916438  },
-    { "country": "Argentina", "area": 945336  },
-    { "country": "Czech Republic", "area": 26000  },
-    { "country": "United States", "area": 3100950  },
-    { "country": "Luxembourg", "area": 870  },
-    { "country": "Lithuania", "area": 21223  },
-    { "country": "Bulgaria", "area": 36250  },
-    { "country": "Saint Vincent and the Grenadines", "area": 127  },
-    { "country": "Germany", "area": 114190  },
-    { "country": "New Zealand", "area": 85424  },
-    { "country": "Switzerland", "area": 12540  },
-    { "country": "Serbia", "area": 27200  },
-    { "country": "Jamaica", "area": 3308  },
-    { "country": "Mauritius", "area": 612  },
-    { "country": "Haiti", "area": 8300  },
-    { "country": "Sri Lanka", "area": 19330  },
-    { "country": "Romania", "area": 69610  },
-    { "country": "Thailand", "area": 147620  },
-    { "country": "Poland", "area": 90000  },
-    { "country": "Greece", "area": 37520  },
-    { "country": "Liberia", "area": 31540  },
-    { "country": "India", "area": 911061  },
-    { "country": "São Tomé and Príncipe", "area": 270  },
-    { "country": "Malawi", "area": 33176  },
-    { "country": "Turkey", "area": 216781  },
-    { "country": "Saint Lucia", "area": 170  },
-    { "country": "Dominican Republic", "area": 13384  },
-    { "country": "Guinea", "area": 67240  },
-    { "country": "Albania", "area": 7716  },
-    { "country": "Burkina Faso", "area": 67940  },
-    { "country": "Nepal", "area": 36360  },
-    { "country": "Cuba", "area": 27130  },
-    { "country": "Philippines", "area": 71620  },
-    { "country": "South Sudan", "area": 148196  },
-    { "country": "Hungary", "area": 20990  },
-    { "country": "China", "area": 2200000  },
-    { "country": "Belgium", "area": 6834  },
-    { "country": "Madagascar", "area": 128380  },
-    { "country": "Chile", "area": 158781  },
-    { "country": "Antigua and Barbuda", "area": 90  },
-    { "country": "Cape Verde", "area": 840  },
-    { "country": "Uganda", "area": 50000  },
-    { "country": "Botswana", "area": 119430  },
-    { "country": "Saint Kitts and Nevis", "area": 50  },
-    { "country": "Cyprus", "area": 1740  },
-    { "country": "Sudan", "area": 327909 },
-    { "country": "Ukraine", "area": 105000  },
-    { "country": "Australia", "area": 1250000  },
-    { "country": "Morocco", "area": 111325  },
-    { "country": "Denmark", "area": 6120  },
-    { "country": "El Salvador", "area": 2980  },
-    { "country": "Togo", "area": 8000  },
-    { "country": "Lebanon", "area": 1383  },
-    { "country": "Eritrea", "area": 15540  },
-    { "country": "Azerbaijan", "area": 11400  },
-    { "country": "Nigeria", "area": 110890  },
-    { "country": "Rwanda", "area": 3161  },
-    { "country": "United Kingdom", "area": 28650  },
-    { "country": "Grenada", "area": 40  },
-    { "country": "Somalia", "area": 71310  },
-    { "country": "Ireland", "area": 7540  },
-    { "country": "Ghana", "area": 24600  },
-    { "country": "Mali", "area": 125720  },
-    { "country": "Armenia", "area": 2974  },
-    { "country": "Moldova", "area": 3290  },
-    { "country": "Ivory Coast", "area": 30000  },
-    { "country": "Namibia", "area": 76610  },
-    { "country": "Chad", "area": 119210  },
-    { "country": "Netherlands", "area": 3650  },
-    { "country": "Turkmenistan", "area": 41270  },
-    { "country": "Niger", "area": 112000  },
-    { "country": "South Africa", "area": 89170  },
-    { "country": "Israel", "area": 1600  },
-    { "country": "Iran", "area": 110750  },
-    { "country": "Mongolia", "area": 102520  },
-    { "country": "Bangladesh", "area": 8710  },
-    { "country": "Tonga", "area": 40  },
-    { "country": "Pakistan", "area": 42240  },
-    { "country": "Barbados", "area": 20  },
-    { "country": "Burundi", "area": 1270  },
-    { "country": "Uzbekistan", "area": 19690  },
-    { "country": "Kyrgyzstan", "area": 8690  },
-    { "country": "Oman", "area": 13050  },
-    { "country": "Uruguay", "area": 7000  },
-    { "country": "United Arab Emirates", "area": 3120  },
-    { "country": "Ethiopia", "area": 39313  },
-    { "country": "Maldives", "area": 10  },
-    { "country": "Singapore", "area": 20  },
-    { "country": "Tajikistan", "area": 4100  },
-    { "country": "Syria", "area": 4610  },
-    { "country": "Kiribati", "area": 20  },
-    { "country": "Kenya", "area": 13200  },
-    { "country": "Comoros", "area": 50  },
-    { "country": "Kazakhstan", "area": 54498  },
-    { "country": "Iceland", "area": 1930  },
-    { "country": "Iraq", "area": 8220  },
-    { "country": "Algeria", "area": 42000  },
-    { "country": "San Marino", "area": 1 },
-    { "country": "Tunisia", "area": 2601 },
-    { "country": "Palestine", "area": 90  },
-    { "country": "Saudi Arabia", "area": 27000  },
-    { "country": "Jordan", "area": 893  },
-    { "country": "Eswatini", "area": 174  },
-    { "country": "Malta", "area": 3 },
-    { "country": "Yemen", "area": 4490  },
-    { "country": "Bahrain", "area": 5 },
-    { "country": "Kuwait", "area": 60  },
-    { "country": "Mauritania", "area": 2670  },
-    { "country": "Lesotho", "area": 80  },
-    { "country": "Djibouti", "area": 60  },
-    { "country": "Afghanistan", "area": 1631  },
-    { "country": "Libya", "area": 2170  },
-    { "country": "Egypt", "area": 670  },
-    { "country": "Qatar", "area": 9  }
+  {
+    "name": "Suriname",
+    "area": 147760,
+    "code": "SUR"
+  },
+  {
+    "name": "Micronesia",
+    "area": 630,
+    "code": "FSM"
+  },
+  {
+    "name": "Seychelles",
+    "area": 407,
+    "code": "SYC"
+  },
+  {
+    "name": "Tuvalu",
+    "area": 23,
+    "code": "TUV"
+  },
+  {
+    "name": "Palau",
+    "area": 400,
+    "code": "PLW"
+  },
+  {
+    "name": "Gabon",
+    "area": 227517,
+    "code": "GAB"
+  },
+  {
+    "name": "Mozambique",
+    "area": 620000,
+    "code": "MOZ"
+  },
+  {
+    "name": "Solomon Islands",
+    "area": 22534,
+    "code": "SLB"
+  },
+  {
+    "name": "North Korea",
+    "area": 76240,
+    "code": "PRK"
+  },
+  {
+    "name": "Finland",
+    "area": 233320,
+    "code": "FIN"
+  },
+  {
+    "name": "Belize",
+    "area": 16530,
+    "code": "BLZ"
+  },
+  {
+    "name": "Laos",
+    "area": 170000,
+    "code": "LAO"
+  },
+  {
+    "name": "Bhutan",
+    "area": 24764,
+    "code": "BTN"
+  },
+  {
+    "name": "Guyana",
+    "area": 151040,
+    "code": "GUY"
+  },
+  {
+    "name": "Sweden",
+    "area": 280730,
+    "code": "SWE"
+  },
+  {
+    "name": "Japan",
+    "area": 253203,
+    "code": "JPN"
+  },
+  {
+    "name": "Zimbabwe",
+    "area": 259267,
+    "code": "ZWE"
+  },
+  {
+    "name": "the Republic of the Congo",
+    "area": 224710,
+    "code": "COG"
+  },
+  {
+    "name": "Dominica",
+    "area": 488,
+    "code": "DMA"
+  },
+  {
+    "name": "Myanmar",
+    "area": 430560,
+    "code": "MMR"
+  },
+  {
+    "name": "Papua New Guinea",
+    "area": 294370,
+    "code": "PNG"
+  },
+  {
+    "name": "South Korea",
+    "area": 63346,
+    "code": "KOR"
+  },
+  {
+    "name": "Bosnia and Herzegovina",
+    "area": 32315,
+    "code": "BIH"
+  },
+  {
+    "name": "Slovenia",
+    "area": 12574,
+    "code": "SVN"
+  },
+  {
+    "name": "Brazil",
+    "area": 5173689,
+    "code": "BRA"
+  },
+  {
+    "name": "Estonia",
+    "area": 23066,
+    "code": "EST"
+  },
+  {
+    "name": "Honduras",
+    "area": 67254,
+    "code": "HND"
+  },
+  {
+    "name": "Latvia",
+    "area": 38755,
+    "code": "LVA"
+  },
+  {
+    "name": "Taiwan",
+    "area": 21588,
+    "code": "TWN"
+  },
+  {
+    "name": "Malaysia",
+    "area": 195200,
+    "code": "MYS"
+  },
+  {
+    "name": "Equatorial Guinea",
+    "area": 16320,
+    "code": "GNQ"
+  },
+  {
+    "name": "Guinea-Bissau",
+    "area": 20720,
+    "code": "GNB"
+  },
+  {
+    "name": "Panama",
+    "area": 42940,
+    "code": "PAN"
+  },
+  {
+    "name": "Benin",
+    "area": 61860,
+    "code": "BEN"
+  },
+  {
+    "name": "Fiji",
+    "area": 10000,
+    "code": "FJI"
+  },
+  {
+    "name": "Timor-Leste",
+    "area": 7980,
+    "code": "TLS"
+  },
+  {
+    "name": "Peru",
+    "area": 687420,
+    "code": "PER"
+  },
+  {
+    "name": "Bolivia",
+    "area": 587400,
+    "code": "BOL"
+  },
+  {
+    "name": "Colombia",
+    "area": 607280,
+    "code": "COL"
+  },
+  {
+    "name": "Venezuela",
+    "area": 471378,
+    "code": "VEN"
+  },
+  {
+    "name": "Cambodia",
+    "area": 93350,
+    "code": "KHM"
+  },
+  {
+    "name": "Bahamas",
+    "area": 5150,
+    "code": "BHS"
+  },
+  {
+    "name": "Guatemala",
+    "area": 108894,
+    "code": "GTM"
+  },
+  {
+    "name": "the Democratic Republic of the Congo",
+    "area": 1172704,
+    "code": "COD"
+  },
+  {
+    "name": "Zambia",
+    "area": 376309,
+    "code": "ZMB"
+  },
+  {
+    "name": "Russia",
+    "area": 8149300,
+    "code": "RUS"
+  },
+  {
+    "name": "Brunei",
+    "area": 2780,
+    "code": "BRN"
+  },
+  {
+    "name": "Angola",
+    "area": 591040,
+    "code": "AGO"
+  },
+  {
+    "name": "Austria",
+    "area": 39600,
+    "code": "AUT"
+  },
+  {
+    "name": "Indonesia",
+    "area": 884950,
+    "code": "IDN"
+  },
+  {
+    "name": "Paraguay",
+    "area": 184750,
+    "code": "PRY"
+  },
+  {
+    "name": "Montenegro",
+    "area": 6252,
+    "code": "MNE"
+  },
+  {
+    "name": "Cameroon",
+    "area": 212450,
+    "code": "CMR"
+  },
+  {
+    "name": "Senegal",
+    "area": 86730,
+    "code": "SEN"
+  },
+  {
+    "name": "Trinidad and Tobago",
+    "area": 2260,
+    "code": "TTO"
+  },
+  {
+    "name": "Croatia",
+    "area": 24901,
+    "code": "HRV"
+  },
+  {
+    "name": "Liechtenstein",
+    "area": 70,
+    "code": "LIE"
+  },
+  {
+    "name": "Gambia",
+    "area": 4857,
+    "code": "GMB"
+  },
+  {
+    "name": "Ecuador",
+    "area": 115510,
+    "code": "ECU"
+  },
+  {
+    "name": "Georgia",
+    "area": 28577,
+    "code": "GEO"
+  },
+  {
+    "name": "Slovakia",
+    "area": 20006,
+    "code": "SVK"
+  },
+  {
+    "name": "Costa Rica",
+    "area": 20440,
+    "code": "CRI"
+  },
+  {
+    "name": "North Macedonia",
+    "area": 10285,
+    "code": "MKD"
+  },
+  {
+    "name": "Nicaragua",
+    "area": 51890,
+    "code": "NIC"
+  },
+  {
+    "name": "Belarus",
+    "area": 80334,
+    "code": "BLR"
+  },
+  {
+    "name": "Sierra Leone",
+    "area": 27540,
+    "code": "SLE"
+  },
+  {
+    "name": "Norway",
+    "area": 121120,
+    "code": "NOR"
+  },
+  {
+    "name": "Tanzania",
+    "area": 352570,
+    "code": "TZA"
+  },
+  {
+    "name": "Vietnam",
+    "area": 123000,
+    "code": "VNM"
+  },
+  {
+    "name": "Samoa",
+    "area": 1050,
+    "code": "ASM"
+  },
+  {
+    "name": "France",
+    "area": 246640,
+    "code": "FRA"
+  },
+  {
+    "name": "Spain",
+    "area": 184180,
+    "code": "ESP"
+  },
+  {
+    "name": "Vanuatu",
+    "area": 4470,
+    "code": "VUT"
+  },
+  {
+    "name": "the Central African Republic",
+    "area": 227550,
+    "code": "CAF"
+  },
+  {
+    "name": "Mexico",
+    "area": 710000,
+    "code": "MEX"
+  },
+  {
+    "name": "Italy",
+    "area": 106736,
+    "code": "ITA"
+  },
+  {
+    "name": "Portugal",
+    "area": 31820,
+    "code": "PRT"
+  },
+  {
+    "name": "Andorra",
+    "area": 160,
+    "code": "AND"
+  },
+  {
+    "name": "Canada",
+    "area": 4916438,
+    "code": "CAN"
+  },
+  {
+    "name": "Argentina",
+    "area": 945336,
+    "code": "ARG"
+  },
+  {
+    "name": "the Czech Republic",
+    "area": 26000,
+    "code": "CZE"
+  },
+  {
+    "name": "the United States of America",
+    "area": 3100950,
+    "code": "USA"
+  },
+  {
+    "name": "Luxembourg",
+    "area": 870,
+    "code": "LUX"
+  },
+  {
+    "name": "Lithuania",
+    "area": 21223,
+    "code": "LTU"
+  },
+  {
+    "name": "Bulgaria",
+    "area": 36250,
+    "code": "BGR"
+  },
+  {
+    "name": "Saint Vincent and the Grenadines",
+    "area": 127,
+    "code": "VCT"
+  },
+  {
+    "name": "Germany",
+    "area": 114190,
+    "code": "DEU"
+  },
+  {
+    "name": "New Zealand",
+    "area": 85424,
+    "code": "NZL"
+  },
+  {
+    "name": "Switzerland",
+    "area": 12540,
+    "code": "CHE"
+  },
+  {
+    "name": "Serbia",
+    "area": 27200,
+    "code": "SRB"
+  },
+  {
+    "name": "Jamaica",
+    "area": 3308,
+    "code": "JAM"
+  },
+  {
+    "name": "Mauritius",
+    "area": 612,
+    "code": "MUS"
+  },
+  {
+    "name": "Haiti",
+    "area": 8300,
+    "code": "HTI"
+  },
+  {
+    "name": "Sri Lanka",
+    "area": 19330,
+    "code": "LKA"
+  },
+  {
+    "name": "Romania",
+    "area": 69610,
+    "code": "ROU"
+  },
+  {
+    "name": "Thailand",
+    "area": 147620,
+    "code": "THA"
+  },
+  {
+    "name": "Poland",
+    "area": 90000,
+    "code": "POL"
+  },
+  {
+    "name": "Greece",
+    "area": 37520,
+    "code": "GRC"
+  },
+  {
+    "name": "Liberia",
+    "area": 31540,
+    "code": "LBR"
+  },
+  {
+    "name": "India",
+    "area": 911061,
+    "code": "IND"
+  },
+  {
+    "name": "São Tomé and Príncipe",
+    "area": 270,
+    "code": "STP"
+  },
+  {
+    "name": "Malawi",
+    "area": 33176,
+    "code": "MWI"
+  },
+  {
+    "name": "Turkey",
+    "area": 216781,
+    "code": "TUR"
+  },
+  {
+    "name": "Saint Lucia",
+    "area": 170,
+    "code": "LCA"
+  },
+  {
+    "name": "the Dominican Republic",
+    "area": 13384,
+    "code": "DOM"
+  },
+  {
+    "name": "Guinea",
+    "area": 67240,
+    "code": "GNQ"
+  },
+  {
+    "name": "Albania",
+    "area": 7716,
+    "code": "ALB"
+  },
+  {
+    "name": "Burkina Faso",
+    "area": 67940,
+    "code": "BFA"
+  },
+  {
+    "name": "Nepal",
+    "area": 36360,
+    "code": "NPL"
+  },
+  {
+    "name": "Cuba",
+    "area": 27130,
+    "code": "CUB"
+  },
+  {
+    "name": "Philippines",
+    "area": 71620,
+    "code": "PHL"
+  },
+  {
+    "name": "South Sudan",
+    "area": 148196,
+    "code": "SSD"
+  },
+  {
+    "name": "Hungary",
+    "area": 20990,
+    "code": "HUN"
+  },
+  {
+    "name": "China",
+    "area": 2200000,
+    "code": "CHN"
+  },
+  {
+    "name": "Belgium",
+    "area": 6834,
+    "code": "BEL"
+  },
+  {
+    "name": "Madagascar",
+    "area": 128380,
+    "code": "MDG"
+  },
+  {
+    "name": "Chile",
+    "area": 158781,
+    "code": "CHL"
+  },
+  {
+    "name": "Antigua and Barbuda",
+    "area": 90,
+    "code": "ATG"
+  },
+  {
+    "name": "Cabo Verde",
+    "area": 840,
+    "code": "CPV"
+  },
+  {
+    "name": "Uganda",
+    "area": 50000,
+    "code": "UGA"
+  },
+  {
+    "name": "Botswana",
+    "area": 119430,
+    "code": "BWA"
+  },
+  {
+    "name": "Saint Kitts and Nevis",
+    "area": 50,
+    "code": "KNA"
+  },
+  {
+    "name": "Cyprus",
+    "area": 1740,
+    "code": "CYP"
+  },
+  {
+    "name": "Sudan",
+    "area": 327909,
+    "code": "SSD"
+  },
+  {
+    "name": "Ukraine",
+    "area": 105000,
+    "code": "UKR"
+  },
+  {
+    "name": "Australia",
+    "area": 1250000,
+    "code": "AUS"
+  },
+  {
+    "name": "Morocco",
+    "area": 111325,
+    "code": "MAR"
+  },
+  {
+    "name": "Denmark",
+    "area": 6120,
+    "code": "DNK"
+  },
+  {
+    "name": "El Salvador",
+    "area": 2980,
+    "code": "SLV"
+  },
+  {
+    "name": "Togo",
+    "area": 8000,
+    "code": "TGO"
+  },
+  {
+    "name": "Lebanon",
+    "area": 1383,
+    "code": "LBN"
+  },
+  {
+    "name": "Eritrea",
+    "area": 15540,
+    "code": "ERI"
+  },
+  {
+    "name": "Azerbaijan",
+    "area": 11400,
+    "code": "AZE"
+  },
+  {
+    "name": "Nigeria",
+    "area": 110890,
+    "code": "NGA"
+  },
+  {
+    "name": "Rwanda",
+    "area": 3161,
+    "code": "RWA"
+  },
+  {
+    "name": "the United Kingdom",
+    "area": 28650,
+    "code": "GBR"
+  },
+  {
+    "name": "Grenada",
+    "area": 40,
+    "code": "GRD"
+  },
+  {
+    "name": "Somalia",
+    "area": 71310,
+    "code": "SOM"
+  },
+  {
+    "name": "Ireland",
+    "area": 7540,
+    "code": "IRL"
+  },
+  {
+    "name": "Ghana",
+    "area": 24600,
+    "code": "GHA"
+  },
+  {
+    "name": "Mali",
+    "area": 125720,
+    "code": "MLI"
+  },
+  {
+    "name": "Armenia",
+    "area": 2974,
+    "code": "ARM"
+  },
+  {
+    "name": "Moldova",
+    "area": 3290,
+    "code": "MDA"
+  },
+  {
+    "name": "Ivory Coast",
+    "area": 30000,
+    "code": "CIV"
+  },
+  {
+    "name": "Namibia",
+    "area": 76610,
+    "code": "NAM"
+  },
+  {
+    "name": "Chad",
+    "area": 119210,
+    "code": "TCD"
+  },
+  {
+    "name": "Netherlands",
+    "area": 3650,
+    "code": "NLD"
+  },
+  {
+    "name": "Turkmenistan",
+    "area": 41270,
+    "code": "TKM"
+  },
+  {
+    "name": "Niger",
+    "area": 112000,
+    "code": "NER"
+  },
+  {
+    "name": "South Africa",
+    "area": 89170,
+    "code": "ZAF"
+  },
+  {
+    "name": "Israel",
+    "area": 1600,
+    "code": "ISR"
+  },
+  {
+    "name": "Iran",
+    "area": 110750,
+    "code": "IRN"
+  },
+  {
+    "name": "Mongolia",
+    "area": 102520,
+    "code": "MNG"
+  },
+  {
+    "name": "Bangladesh",
+    "area": 8710,
+    "code": "BGD"
+  },
+  {
+    "name": "Tonga",
+    "area": 40,
+    "code": "TON"
+  },
+  {
+    "name": "Pakistan",
+    "area": 42240,
+    "code": "PAK"
+  },
+  {
+    "name": "Barbados",
+    "area": 20,
+    "code": "BRB"
+  },
+  {
+    "name": "Burundi",
+    "area": 1270,
+    "code": "BDI"
+  },
+  {
+    "name": "Uzbekistan",
+    "area": 19690,
+    "code": "UZB"
+  },
+  {
+    "name": "Kyrgyzstan",
+    "area": 8690,
+    "code": "KGZ"
+  },
+  {
+    "name": "Oman",
+    "area": 13050,
+    "code": "OMN"
+  },
+  {
+    "name": "Uruguay",
+    "area": 7000,
+    "code": "URY"
+  },
+  {
+    "name": "the United Arab Emirates",
+    "area": 3120,
+    "code": "ARE"
+  },
+  {
+    "name": "Ethiopia",
+    "area": 39313,
+    "code": "ETH"
+  },
+  {
+    "name": "Maldives",
+    "area": 10,
+    "code": "MDV"
+  },
+  {
+    "name": "Singapore",
+    "area": 20,
+    "code": "SGP"
+  },
+  {
+    "name": "Tajikistan",
+    "area": 4100,
+    "code": "TJK"
+  },
+  {
+    "name": "Syria",
+    "area": 4610,
+    "code": "SYR"
+  },
+  {
+    "name": "Kiribati",
+    "area": 20,
+    "code": "KIR"
+  },
+  {
+    "name": "Kenya",
+    "area": 13200,
+    "code": "KEN"
+  },
+  {
+    "name": "Comoros",
+    "area": 50,
+    "code": "COM"
+  },
+  {
+    "name": "Kazakhstan",
+    "area": 54498,
+    "code": "KAZ"
+  },
+  {
+    "name": "Iceland",
+    "area": 1930,
+    "code": "ISL"
+  },
+  {
+    "name": "Iraq",
+    "area": 8220,
+    "code": "IRQ"
+  },
+  {
+    "name": "Algeria",
+    "area": 42000,
+    "code": "DZA"
+  },
+  {
+    "name": "San Marino",
+    "area": 1,
+    "code": "SMR"
+  },
+  {
+    "name": "Tunisia",
+    "area": 2601,
+    "code": "TUN"
+  },
+  {
+    "name": "Palestine",
+    "area": 90,
+    "code": "PSE"
+  },
+  {
+    "name": "Saudi Arabia",
+    "area": 27000,
+    "code": "SAU"
+  },
+  {
+    "name": "Jordan",
+    "area": 893,
+    "code": "JOR"
+  },
+  {
+    "name": "Eswatini",
+    "area": 174,
+    "code": "SWZ"
+  },
+  {
+    "name": "Malta",
+    "area": 3,
+    "code": "MLT"
+  },
+  {
+    "name": "Yemen",
+    "area": 4490,
+    "code": "YEM"
+  },
+  {
+    "name": "Bahrain",
+    "area": 5,
+    "code": "BHR"
+  },
+  {
+    "name": "Kuwait",
+    "area": 60,
+    "code": "KWT"
+  },
+  {
+    "name": "Mauritania",
+    "area": 2670,
+    "code": "MRT"
+  },
+  {
+    "name": "Lesotho",
+    "area": 80,
+    "code": "LSO"
+  },
+  {
+    "name": "Djibouti",
+    "area": 60,
+    "code": "DJI"
+  },
+  {
+    "name": "Afghanistan",
+    "area": 1631,
+    "code": "AFG"
+  },
+  {
+    "name": "Libya",
+    "area": 2170,
+    "code": "LBY"
+  },
+  {
+    "name": "Egypt",
+    "area": 670,
+    "code": "EGY"
+  },
+  {
+    "name": "Qatar",
+    "area": 9,
+    "code": "QAT"
+  }
 ]
