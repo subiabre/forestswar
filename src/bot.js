@@ -165,7 +165,7 @@ class Deforestation
         let Country = require('./service/country'),
             data = new Country(),
             list = this.list[memory.country],
-            country = await data.getByName(list.country);
+            country = await data.getByCode(list.code);
         this.console(`COUNTRY IS: ${list.country}.`);
 
         // Fetch GLAD
@@ -197,7 +197,7 @@ class Deforestation
                 memory.country += 1;
 
                 let countries = this.list.length - memory.country;
-                message = `${kilometers}km² deforestated, ${list.country} has been deforestated. ${countries} countries remaining.`;
+                message = `${kilometers}km² deforestated, ${list.name} has been deforestated. ${countries} countries remaining.`;
             }
 
             this.updateTwitter(map, message);
