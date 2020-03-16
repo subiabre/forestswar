@@ -199,7 +199,7 @@ class Deforestation
                 
             var message = `${kilometers}km² deforestated, ${lost} since the last update. ${forests}km² remaining.`;
 
-            if (country.area < area) {
+            if (list.area < area) {
                 memory.country += 1;
 
                 let countries = this.list.length - memory.country;
