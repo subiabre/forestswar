@@ -5,7 +5,10 @@
  */
 class GLAD
 {
-    constructor()
+    /**
+     * @param {bool} logging On/off console printing of country fetching status
+     */
+    constructor(logging = false)
     {
         /**
          * GFW API URI: \
@@ -14,6 +17,8 @@ class GLAD
         this.api = 'http://production-api.globalforestwatch.org/glad-alerts';
 
         this.http = require('http');
+
+        this.logging = logging;
     }
 
     /**
@@ -114,7 +119,7 @@ class GLAD
 
                 res.on('end', () => {
                     alerts = JSON.parse(alerts);
-                    
+
                     resolve(alerts);
                 });
             }).on('error', (error) => {
@@ -134,6 +139,10 @@ class GLAD
         let alerts = await this.fetchCountry(country, period);
 
         if (alerts.errors) {
+            if (this.logging) {
+                console.log(`${country}: ${alerts.errors[0].detail}`);
+            }
+
             if (alerts.errors[0].status == 500) {
                 alerts = { data: { attributes: { value: 0 }}};
             }
@@ -143,7 +152,13 @@ class GLAD
             }
         }
 
-        return this.alertsArea(alerts);
+        let area = this.alertsArea(alerts);
+
+        if (this.logging) {
+            console.log(`${country}: ${alerts.data.attributes.value} (${area})`);
+        }
+
+        return area;
     }
 
     /**
