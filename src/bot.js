@@ -75,6 +75,7 @@ class Deforestation
             databaseUrl: process.env.DATABASE_URL,
 
             logging: process.env.LOGGING,
+            loggingGlad: process.env.LOGGING_GLAD,
 
             delay: process.env.DELAY_MS || 400,
 
@@ -136,6 +137,8 @@ class Deforestation
          */
         this.glad = new GLAD();
 
+        this.glad.logging = this.env.loggingGlad;
+
         /**
          * Mapper service internal instance
          */
@@ -170,8 +173,9 @@ class Deforestation
 
         // Fetch GLAD
         this.console('FETCHING FROM GLAD API.');
-        let period = this.glad.formatPeriod(this.env.startDate);
-        let area = await this.glad.getAlerts(period, this.env.delay);
+
+        let period = this.glad.formatPeriod(this.env.startDate),
+            area = await this.glad.getAlerts(period, this.env.delay, this.env.logging);
         this.console(`DEFORESTATED AREA IS: ${area}.`);
 
         if (area > memory.area) {
