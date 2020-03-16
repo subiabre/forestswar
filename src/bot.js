@@ -193,9 +193,11 @@ class Deforestation
             // Write message
             let kilometers = area.toLocaleString(),
                 difference = area - memory.area,
-                lost = difference.toLocaleString();
+                lost = difference.toLocaleString(),
+                remaining = list.area - area,
+                forests = remaining.toLocaleString();
                 
-            var message = `${kilometers}km² deforestated, ${lost} since the last update.`;
+            var message = `${kilometers}km² deforestated, ${lost} since the last update. ${forests}km² remaining.`;
 
             if (country.area < area) {
                 memory.country += 1;
