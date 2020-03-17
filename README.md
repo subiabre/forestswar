@@ -1,7 +1,7 @@
 # Forests War Bot
 A bot to help visualize tree cover loss across the world.
 
-![logo](https://user-images.githubusercontent.com/61125897/76840519-a17c7680-6837-11ea-8abd-a2a11e420284.png)
+![logo_300](https://user-images.githubusercontent.com/61125897/76841080-8eb67180-6838-11ea-8173-62c5ef5ce0b0.png)
 
 This package contains the application that runs and serves the Twitter feed at twitter.com/[@ForestsWar](https://twitter.com/ForestsWar). Everyday at 19:00 UTC, this app is run as described in `bot.routine()`.
 
