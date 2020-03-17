@@ -1,7 +1,7 @@
 # Forests War Bot
 A bot to help visualize tree cover loss across the world.
 
-[Twitter](https://twitter.com/ForestsWar)
+![logo](https://user-images.githubusercontent.com/61125897/76840519-a17c7680-6837-11ea-8abd-a2a11e420284.png)
 
 This package contains the application that runs and serves the Twitter feed at twitter.com/[@ForestsWar](https://twitter.com/ForestsWar). Everyday at 19:00 UTC, this app is run as described in `bot.routine()`.
 
@@ -64,15 +64,13 @@ Due to unknown causes the GFW API presents frequent and irregular data changes, 
 This data loss is consistent with the percentage of false accuracy [described by GFW](https://blog.globalforestwatch.org/data-and-research/how-accurate-is-accurate-enough-examining-the-glad-global-tree-cover-change-data-part-1), so it's not expected to be fixed in any near future despite the API being in beta. Also despite this fact, this data source remains **the most accurate** when tracking global change of forests.
 
 #### Possibly misleading maps
-In order to picture a better deforestation comparison, the bot uses the country's **forest surface** instead of the total surface when drawing maps. This means that a map of a country fully red is not equivalent to the entire area of the country being deforestated, as it could appear to be the impression, but rather is the entire forestal area of the country being deforestated.
+In order to picture a better deforestation comparison, the bot uses the country's **forest surface** instead of the total surface when drawing maps. This means that a map of a country fully red is not equivalent to the entire area of the country being deforestated, as it could be the impression, but rather is the entire forestal area of the country being deforestated.
 
 This is because of a very simple fact: **you can't deforestate area that wasn't forest**. To represent maps with the deforestated area against the entire area of a country would not be a fair comparison.
 
-#### Inexact maps
+#### Watermark counting as land
 Usually when an entire country is deforestated there will appear some red spots in the bottom right corner of the map. This is because the GADM watermark is of the same color as the map land area, leading the bot to believe that those pixels in the map are also land area.
 
 Actually this behaviour does not lead to inaccuracies in the map representation.
 
 When drawing a map, the bot calculates the percentage of the country that has been deforestated, once it knows the percentage it counts the pixels in the map that are land and paints as many red pixels as the percentage means.
-
-Due to every map being watermarked by GADM, the same amount of *no-land* pixels appear on every map, thus every map has the right amount of pixels painted. You could consider the watermark pixels a minimun amount of pixels that every map has.
