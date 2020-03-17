@@ -1,107 +1,78 @@
-A bot to help visualize deforestation. Inspired by [a friend's one](https://gitlab.com/wishiwasrubin/fwbot).
+# Forests War Bot
+A bot to help visualize tree cover loss across the world.
 
-[![time tracker](https://wakatime.com/badge/gitlab/subiabre/deforestation.svg)](https://wakatime.com/badge/gitlab/subiabre/deforestation)
+[Twitter](https://twitter.com/ForestsWar)
 
-1. [Project summary](#tracking-and-mapping-deforestation)
-    1. [How does it work](#how-does-it-work)
-    2. [Why is this important](#why-is-this-important)
-    3. [How is deforestated area calculated](#how-is-deforestated-area-calculated)
-    4. [How are maps done](#how-are-maps-done)
-2. [Developer manual](#how-to-setup-in-local-environment)
-    1. [Using the bot services as standalone](#using-the-bot-services-as-standalone)
-3. [Support](#support)
+This package contains the application that runs and serves the Twitter feed at twitter.com/[@ForestsWar](https://twitter.com/ForestsWar). Everyday at 19:00 UTC, this app is run as described in `bot.routine()`.
 
-## Tracking and mapping deforestation
-You've probably seen many times comparisons like *"an area the size of X football fields is lost every Y time"*, and while said data might be true, it's often hard to actually picture how much deforestation happens in our planet. This bot aims to make it easier.
+1. [About](#About)
+2. [Usage](#Usage)
+3. [Support](#Support)
+4. [Concerns](#Concerns-about-accuracy-and-processing-of-data)
 
-Follow it on [Twitter](https://twitter.com/ForestsWar) and start understanding just how much forest area is deforestated.
+## About
+I created this bot because I found it hard to visualize just how much area is deforestated in comparisons like "*1 football pitch per minute*". Inspired by a friend's [one](https://gitlab.com/wishiwasrubin/fwbot) and someone else's [bot](https://twitter.com/WorldWarBot).
 
->**If you think this project is important, please spread the word about it**, share the Twitter page with your friends and family. If you think this project could be improved you are welcome to add contributions via Pull Requests.
+This bot fetches data from [Global Forests Watch](https://www.globalforestwatch.org/) to calculate the lost area since january 1st 2015. The aggregated lost area is then compared against the forest area of a country from a [list](https://en.wikipedia.org/wiki/List_of_countries_by_forest_area) of 192 countries.
 
-### How does it work?
-The idea is simple. Since 2015 there's been a war between global deforestation and forest area. Deforestation just keeps growing larger and larger, conquering former forest ground. Will your country survive the deforestation?
+To make the comparisons easy to understand, the bot draws a map using images from [GADM](https://gadm.org/). These maps are a pixel exact representation of the deforestated area against the forest area from that country.
 
-This bot has an internal database that keeps track of deforestated area thanks to [GLAD alerts](https://glad.umd.edu/projects/global-forest-watch). Everytime the bot is run, it fetches the total area deforestated since january 1st 2015, the start of "the war", and the current date, then it compares the area to the area of a country.
+When the data is obtained and the map is drawn, a new status update is sent to [Twitter](https://twitter.com/ForestWar).
 
-Maps are pixel by pixel comparisons of deforestated area against the forest area of a country (represented as if the country's forest area is the total area) from the `list.json` package. When the whole area of a country has been lost to deforestation, the bot goes on to the next country in the list.
+## Usage
+This package contains some services that could be of great utility for independent researchers and developers, because of that, services are completely decoupled from the bot itself and can be used as standalone packages.
 
-This process may take years. Hopefully more than it takes to recover the deforestated area.
+All code is well documented and commented, so it shouldn't be a hassle to work with them.
 
-### Why is this important?
-Main concern for deforestation is that replanting and recovering forest biomass takes years, if not decades.
+Consider the following examples:
 
-This bot aims to factually know the rate at which we exploit forests' resources and make the data accessible and easy to understand for anyone who is interested. 
-
->All data displayed is retrieved from third party services. This bot **does not** generate, manipulate or destroy any data about deforestation.
-
-Even though this bot compares deforestated areas against countries areas, it's important to note that not the entire area of any country listed is actually forest, so the deforestation rate actually appears as smaller than the actual rate at which forests disappear.
-
-### How is deforestated area calculated?
-The [GLAD](https://glad.umd.edu/projects/global-forest-watch) laboratory keeps a public dataset of tree cover change based on Landsat satellite imagery.
-
-[Global Forest Watch](https://www.globalforestwatch.org/) puts it in a easy to use, updated [API](http://production-api.globalforestwatch.org/). Although it could work a little bit better (it's known to show frequents loss of data that the bot is designed to minimize).
-
-For implementation details check the `GLAD` service.
-
-### How are maps done?
-[GADM](https://gadm.org/) provides a nice set of clean map images by country.
-
-[REST countries](https://restcountries.eu/) serves a handy API to obtain countries data.
-
-[Jimp](https://www.npmjs.com/package/jimp), [count-pixels](https://www.npmjs.com/package/count-pixels) and [replace-color](https://www.npmjs.com/package/replace-color) do all the real work regarding image manipulation.
-
-For implementation details check the `Mapper` service.
-
-## How to setup in local environment
-Before anything you'll need to have [Node.js](https://nodejs.org) and [npm](http://npmjs.com) installed. Then:
-
-```console
-$ git clone https://github.com/subiabre/deforestation.git
-$ cd deforestation
-$ npm install
-```
-
-The bot takes environment configuration:
-```console
-$ cp .env.example .env
-```
-You'll find commentary explaining all the keys.
-
-To launch the bot:
-```console
-$ node index.js
-```
-
-This project uses [Mocha](https://mochajs.org/) as testing framework:
-```console
-$ npm test
-```
-
-### Using the bot services as standalone
-This package can be used to generate maps and obtain deforestation data independently of the bot behaviour.
-
-First, you should disable the Twitter flag from your `.env`.
-
-To use the bot services as you please, you can simply play with them: **all the code is well documented** and commented, so it shouldn't be a big hassle to get the bot to do what you want. All the services are detached from the bot and should work fine independently.
-
-Take this example on how to generate a map of your desired country in the desired time period:
+1. Generate a map painting 200 square kilometers in Andorra in blue.
 ```js
-const Deforestation = require('./src/bot');
-const deforestation = new Deforestation();
+const Mapper = require('./src/service/mappper'),
+    mapper = new Mapper();
 
-// Get the deforestated area for our period
-let period = deforestation.glad.formatPeriod('2015-01-01', '2015-12-31');
-let area = await deforestation.glad.getAlerts(period);
+let map = await mapper.setCountry('AND')
+    .paintArea(200, '#0000ff');
+        
+map.write('map/AND.png');
+```
 
-// Draw a map with the obtained area
-let map = await deforestation.map.setCountry('ESP')
-    .paintArea(area);
+2. Obtaining the deforestation for 2015.
+```js
+const GLAD = require('./src/service/glad'),
+    glad = new GLAD();
 
-// Save the resulting map to map/map.png
-map.write('./map/map.png');
-``` 
+let period = glad.formatPeriod('2015-01-01', '2015-12-31'),
+    area = await glad.getAlerts(period);
+
+console.log(area);
+```
 
 ## Support
-You can contact me at [twitter](https://twitter.com/facutxt) about this bot. If you found a bug or have any concern about this project, please open an Issue.
+If you think this project is interesting, please give it a follow on Twitter and a star in GitHub.
 
-If you find this bot especially interesting, please consider telling more people about it. Starring this repository also helps.
+If you think this project is important, please tell your friends and family about it.
+
+If you think this project could be better, Issues and Pull Requests are open.
+
+### Concerns about accuracy and processing of data:
+The following are some notes on this project's data usage with explanations about why they occur on how does this project attempt to fix them.
+
+#### Data loss
+Due to unknown causes the GFW API presents frequent and irregular data changes, showing different ammounts of data loss on requests in the same timespan for the same period. Bot is designed to minimize this data loss from the GFW API by only using the accumulated area.
+
+This data loss is consistent with the percentage of false accuracy [described by GFW](https://blog.globalforestwatch.org/data-and-research/how-accurate-is-accurate-enough-examining-the-glad-global-tree-cover-change-data-part-1), so it's not expected to be fixed in any near future despite the API being in beta. Also despite this fact, this data source remains **the most accurate** when tracking global change of forests.
+
+#### Possibly misleading maps
+In order to picture a better deforestation comparison, the bot uses the country's **forest surface** instead of the total surface when drawing maps. This means that a map of a country fully red is not equivalent to the entire area of the country being deforestated, as it could appear to be the impression, but rather is the entire forestal area of the country being deforestated.
+
+This is because of a very simple fact: **you can't deforestate area that wasn't forest**. To represent maps with the deforestated area against the entire area of a country would not be a fair comparison.
+
+#### Inexact maps
+Usually when an entire country is deforestated there will appear some red spots in the bottom right corner of the map. This is because the GADM watermark is of the same color as the map land area, leading the bot to believe that those pixels in the map are also land area.
+
+Actually this behaviour does not lead to inaccuracies in the map representation.
+
+When drawing a map, the bot calculates the percentage of the country that has been deforestated, once it knows the percentage it counts the pixels in the map that are land and paints as many red pixels as the percentage means.
+
+Due to every map being watermarked by GADM, the same amount of *no-land* pixels appear on every map, thus every map has the right amount of pixels painted. You could consider the watermark pixels a minimun amount of pixels that every map has.
