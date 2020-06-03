@@ -197,7 +197,7 @@ class Deforestation
                 remaining = list.area - area,
                 forests = remaining.toLocaleString();
                 
-            var message = `${kilometers}km² deforestated, ${lost} since the last update. ${forests}km² remaining.`;
+            var message = `${kilometers}km² deforestated in ${list.name}, ${lost} since the last update. ${forests}km² remaining.`;
 
             if (list.area < area) {
                 memory.country += 1;
