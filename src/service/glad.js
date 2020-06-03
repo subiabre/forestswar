@@ -143,7 +143,7 @@ class GLAD
                 console.log(`${country}: ${alerts.errors[0].detail}`);
             }
 
-            if (alerts.errors[0].status == 500) {
+            if (alerts.errors[0].status == 500 || alerts.errors[0].status == 404) {
                 alerts = { data: { attributes: { value: 0 }}};
             }
 
