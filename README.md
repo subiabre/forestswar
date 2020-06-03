@@ -56,7 +56,7 @@ If you think this project is important, please tell your friends and family abou
 If you think this project could be better, Issues and Pull Requests are open.
 
 ### Concerns about accuracy and processing of data:
-The following are some notes on this project's data usage with explanations about why they occur on how does this project attempt to fix them.
+The following are some notes on this project's data usage with explanations about why they occur and how does this project attempt to fix them.
 
 #### Data loss
 Due to unknown causes the GFW API presents frequent and irregular data changes, showing different ammounts of data loss on requests in the same timespan for the same period. Bot is designed to minimize this data loss from the GFW API by only using the accumulated area.
