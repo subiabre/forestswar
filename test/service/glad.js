@@ -35,4 +35,13 @@ describe('Service: GLAD', () => {
         
         assert.isNumber(alerts);
     });
+
+    it ('should return 0 on countries out of API reach', async function() {
+        var glad = new GLAD();
+        var period = glad.formatPeriod('2019-01-01', '2019-12-31');
+        var alerts = await glad.getAlertsCountry('VAT', period);
+
+        assert.isNumber(alerts);
+        assert.equal(alerts, 0);
+    })
 });
