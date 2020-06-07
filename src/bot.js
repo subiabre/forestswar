@@ -174,36 +174,42 @@ class Deforestation
         // Fetch GLAD
         this.console('FETCHING FROM GLAD API.');
 
-        let period = this.glad.formatPeriod(this.env.startDate),
-            area = await this.glad.getAlerts(period, this.env.delay, this.env.logging);
-        this.console(`DEFORESTATED AREA IS: ${area}.`);
+        let gladPeriod = this.glad.formatPeriod(this.env.startDate),
+            gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay);
+        this.console(`DEFORESTATED AREA IS: ${gladArea}.`);
 
-        if (area > memory.area) {
+        if (gladArea > memory.area || true) {
             this.console(`BOT MEMORY OUTDATED.`);
 
             // Get deforestated area in comparison to country forest area
-            let ratio = area * 100 / countryList.area,
-                deforestation = ratio * country.area / 100;
+            let ratio = gladArea * 100 / countryList.area,
+                deforestationArea = ratio * country.area / 100;
             
             // Get map with deforestated area
             let map = await this.map.setCountry(country.alpha3Code).
-                paintArea(deforestation, this.env.deforestatedColor);
+                paintArea(deforestationArea, this.env.deforestatedColor);
             this.console('GENERATED MAP.');
 
+                // Calc area in km
+            let gladAreaKm = gladArea.toLocaleString(),
+                // Calc difference between new deforestated area and previous
+                lostArea = gladArea - memory.area,
+                // Calc difference area in km
+                lostAreaKm = lostArea.toLocaleString(),
+                // Calc difference between country forestal area and new deforestated area
+                remainingArea = countryList.area - gladArea,
+                // Calc remaining in km
+                remainingAreaKm = remainingArea.toLocaleString();
+            
             // Write message
-            let kilometers = area.toLocaleString(),
-                difference = area - memory.area,
-                lost = difference.toLocaleString(),
-                remaining = countryList.area - area,
-                forests = remaining.toLocaleString();
-                
-            var message = `${kilometers}km² deforestated in ${countryList.name}, ${lost} since the last update. ${forests}km² remaining.`;
+            var message = `${gladAreaKm}km² deforestated in ${countryList.name}, ${lostAreaKm} since the last update. ${remainingAreaKm}km² remaining.`;
 
-            if (list.area < area) {
+            if (countryList.area < gladArea) {
+                // Move country memory pointer to the next one
                 memory.country += 1;
 
                 let countries = this.list.length - memory.country;
-                message = `${kilometers}km² deforestated, ${countryList.name} has been deforestated. ${countries} countries remaining.`;
+                message = `${gladAreaKm}km² deforestated, ${countryList.name} has been deforestated. ${countries} countries remaining.`;
             }
 
             this.updateTwitter(map, message);
@@ -212,7 +218,7 @@ class Deforestation
                 newMemory = new Memory({
                 date: this.glad.formatDate(new Date()),
                 country: memory.country,
-                area: area
+                area: gladArea
             });
 
             newMemory.save();
