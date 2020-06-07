@@ -166,10 +166,10 @@ class Deforestation
 
         // Obtain country code and data
         let Country = require('./service/country'),
-            data = new Country(),
-            list = this.list[memory.country],
-            country = await data.getByCode(list.code);
-        this.console(`COUNTRY IS: ${list.name}.`);
+            countriesData = new Country(),
+            countryList = this.list[memory.country],
+            country = await countriesData.getByCode(countryList.code);
+        this.console(`COUNTRY IS: ${countryList.name}.`);
 
         // Fetch GLAD
         this.console('FETCHING FROM GLAD API.');
@@ -182,7 +182,7 @@ class Deforestation
             this.console(`BOT MEMORY OUTDATED.`);
 
             // Get deforestated area in comparison to country forest area
-            let ratio = area * 100 / list.area,
+            let ratio = area * 100 / countryList.area,
                 deforestation = ratio * country.area / 100;
             
             // Get map with deforestated area
@@ -194,16 +194,16 @@ class Deforestation
             let kilometers = area.toLocaleString(),
                 difference = area - memory.area,
                 lost = difference.toLocaleString(),
-                remaining = list.area - area,
+                remaining = countryList.area - area,
                 forests = remaining.toLocaleString();
                 
-            var message = `${kilometers}km² deforestated in ${list.name}, ${lost} since the last update. ${forests}km² remaining.`;
+            var message = `${kilometers}km² deforestated in ${countryList.name}, ${lost} since the last update. ${forests}km² remaining.`;
 
             if (list.area < area) {
                 memory.country += 1;
 
                 let countries = this.list.length - memory.country;
-                message = `${kilometers}km² deforestated, ${list.name} has been deforestated. ${countries} countries remaining.`;
+                message = `${kilometers}km² deforestated, ${countryList.name} has been deforestated. ${countries} countries remaining.`;
             }
 
             this.updateTwitter(map, message);
