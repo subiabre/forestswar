@@ -178,7 +178,7 @@ class Deforestation
             gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay);
         this.console(`DEFORESTATED AREA IS: ${gladArea}.`);
 
-        if (gladArea > memory.area || true) {
+        if (gladArea > memory.area) {
             this.console(`BOT MEMORY OUTDATED.`);
 
             // Get deforestated area in comparison to country forest area
