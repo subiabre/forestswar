@@ -212,11 +212,12 @@ class Deforestation
             
             let Memory = require('./model/memory'),
                 newMemory = new Memory({
-                date: this.glad.formatDate(new Date()),
-                gladDate: gladLatest,
-                country: memory.country,
-                area: gladArea
-            });
+                    date: this.glad.formatDate(new Date()),
+                    gladDate: gladLatest,
+                    country: memory.country,
+                    area: gladArea
+                })
+            ;
 
             newMemory.save();
             this.console('BOT MEMORY UPDATED.');
@@ -244,6 +245,7 @@ class Deforestation
                 if (!memory) {
                     memory = new Memory({
                         date: this.glad.formatDate(new Date()),
+                        gladDate: new Date(),
                         country: 0,
                         area: 0
                     });
