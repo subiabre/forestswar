@@ -215,7 +215,7 @@ class Deforestation
             let Memory = require('./model/memory'),
                 newMemory = new Memory({
                     date: this.glad.formatDate(new Date()),
-                    gladDate: gladLatest,
+                    gladLatest: gladLatest,
                     country: memory.country,
                     area: gladArea
                 })
