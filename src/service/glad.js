@@ -66,7 +66,7 @@ class GLAD
         let area = alert.data.attributes.value;
         area = area * 30 * 30;
 
-        return Math.round(area / 1000000);
+        return area / 1000000;
     }
 
     /**
