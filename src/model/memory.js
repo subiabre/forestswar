@@ -10,6 +10,11 @@ var memorySchema = new Schema({
         immutable: true
     },
 
+    gladLatest: {
+        type: Date,
+        required: true
+    },
+
     country: {
         type: Number,
         default: 0,
