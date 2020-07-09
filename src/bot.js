@@ -41,7 +41,7 @@ class Deforestation
 
     /**
      * Obtain the bot routine log
-     * @return array
+     * @return {JSON}
      */
     getLog()
     {

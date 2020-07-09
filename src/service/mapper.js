@@ -1,5 +1,7 @@
 "use strict"
 
+const Jimp = require('jimp');
+
 /**
  * Mapper service
  */
@@ -7,7 +9,7 @@ class Mapper
 {
     /**
      * Use Mapper to make image maps
-     * @param {string} country Country ISO3 code
+     * @param {String} country Country ISO3 code
      */
     constructor(country)
     {
@@ -22,8 +24,8 @@ class Mapper
 
     /**
      * Set the mapper country code
-     * @param {string} country Country ISO3 code 
-     * @returns {self}
+     * @param {String} country Country ISO3 code 
+     * @returns {Self}
      */
     setCountry(country)
     {
@@ -35,11 +37,10 @@ class Mapper
 
     /**
      * Obtain an image map from GADM
+     * @returns {Jimp}
      */
     async fetchGADM()
     {
-        let Jimp = require('jimp');
-
         return Jimp.read(this.image)
             .then(map => {
                 return map;
@@ -51,7 +52,8 @@ class Mapper
 
     /**
      * Get area of country from REST countries
-     * @param {string} country Country ISO3 code to be fetched 
+     * @param {String} country Country ISO3 code to be fetched 
+     * @returns {Number}
      */
     async fetchCountryArea(country = this.country)
     {
@@ -64,7 +66,7 @@ class Mapper
 
     /**
      * FInd the relation of current map country area to pixels
-     * @return {number} Square kilometers per pixel in map
+     * @return {Promise} Square kilometers per pixel in map
      */
     async kilometersToPixels()
     {
@@ -85,8 +87,9 @@ class Mapper
 
     /**
      * Replace the pixels on the map with deforestaded pixels
-     * @param {number} area Deforestated area
-     * @param {hex} color Deforestated area color
+     * @param {Number} area Deforestated area
+     * @param {String} color Deforestated area color
+     * @returns {Jimp}
      */
     async paintArea(area, color = '#f60b2a')
     {

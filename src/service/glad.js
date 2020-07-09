@@ -23,8 +23,8 @@ class GLAD
 
     /**
      * Formats dates as something GFW API can understand
-     * @param {string|date} date 
-     * @return {string} String date as YYYY-MM-DD
+     * @param {String|Date} date 
+     * @return {String} String date as YYYY-MM-DD
      */
     formatDate(date)
     {
@@ -33,9 +33,9 @@ class GLAD
 
     /**
      * Formats periods as something GFW API can undertsand
-     * @param {string|date} start Date of period start 
-     * @param {string|date} end Date of period end
-     * @return {string} String to be used as period when fetching GFW API
+     * @param {String|Date} start Date of period start 
+     * @param {String|Date} end Date of period end
+     * @return {String} String to be used as period when fetching GFW API
      */
     formatPeriod(start, end = new Date())
     {
@@ -44,8 +44,8 @@ class GLAD
 
     /**
      * Transform a country ISO2 code to ISO3
-     * @param {string} country Country ISO2 code
-     * @return {string} Country ISO3 code
+     * @param {String} country Country ISO2 code
+     * @return {String} Country ISO3 code
      */
     async countryISO3(country)
     {
@@ -71,7 +71,7 @@ class GLAD
 
     /**
      * Obtain the date of the last issued alert
-     * @returns {string} Date object
+     * @returns {Promise} Date object
      */
     async getLatest()
     {
@@ -101,9 +101,9 @@ class GLAD
 
     /**
      * Fetch alerts for a given country in a given period
-     * @param {string} country Country ISO3 code
-     * @param {string} period A period of two date
-     * @returns {object} The response object 
+     * @param {String} country Country ISO3 code
+     * @param {String} period A period of two date
+     * @returns {Promise} The response object 
      */
     async fetchCountry(country, period)
     {
@@ -130,8 +130,8 @@ class GLAD
 
     /**
      * Fetch alerts for a given country in a given period, fail-safe
-     * @param {string} country Country ISO3 code
-     * @param {string} period A period of two dates
+     * @param {String} country Country ISO3 code
+     * @param {String} period A period of two dates
      * @returns {number} Number of square kilometers deforestated
      */
     async getAlertsCountry(country, period)
@@ -163,9 +163,9 @@ class GLAD
 
     /**
      * Fetch alerts for all countries in a given period
-     * @param {string} period A period of two dates
+     * @param {String} period A period of two dates
      * @param {number} delay Number of miliseconds to wait between calls
-     * @returns {number} Number of square kilometers deforestated
+     * @returns {Promise} Number of square kilometers deforestated
      */
     async getAlerts(period, delay = 400)
     {
