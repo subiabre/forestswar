@@ -171,15 +171,15 @@ class Deforestation
             country = await countriesData.getByCode(countryList.code);
         this.console(`COUNTRY IS: ${countryList.name}.`);
 
-        // Fetch GLAD
-        this.console('FETCHING FROM GLAD API.');
+        let gladLatest = this.glad.getLatest();
 
-        let gladPeriod = this.glad.formatPeriod(this.env.startDate),
-            gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay);
-        this.console(`DEFORESTATED AREA IS: ${gladArea}.`);
-
-        if (gladArea > memory.area) {
+        if (gladLatest.getTime() > memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY OUTDATED.`);
+
+            // Fetch GLAD
+            this.console('FETCHING FROM GLAD API.');
+            let gladPeriod = this.glad.formatPeriod(gladLatest);
+            let gladArea = this.glad.getAlerts(gladPeriod, this.env.delay);
 
             // Get deforestated area in comparison to country forest area
             let ratio = gladArea * 100 / countryList.area,
@@ -192,17 +192,13 @@ class Deforestation
 
                 // Calc area in km
             let gladAreaKm = gladArea.toLocaleString(),
-                // Calc difference between new deforestated area and previous
-                lostArea = gladArea - memory.area,
-                // Calc difference area in km
-                lostAreaKm = lostArea.toLocaleString(),
                 // Calc difference between country forestal area and new deforestated area
                 remainingArea = countryList.area - gladArea,
                 // Calc remaining in km
                 remainingAreaKm = remainingArea.toLocaleString();
             
             // Write message
-            var message = `${gladAreaKm}km² deforestated in #${countryList.name}, ${lostAreaKm} since the last update. ${remainingAreaKm}km² remaining. #deforestation`;
+            var message = `${gladAreaKm}km² deforestated globally since the last update. Compared to map of #${countryList.name}. ${remainingAreaKm}km² remaining. #deforestation`;
 
             if (countryList.area < gladArea) {
                 // Move country memory pointer to the next one
@@ -217,6 +213,7 @@ class Deforestation
             let Memory = require('./model/memory'),
                 newMemory = new Memory({
                 date: this.glad.formatDate(new Date()),
+                gladDate: gladLatest,
                 country: memory.country,
                 area: gladArea
             });
