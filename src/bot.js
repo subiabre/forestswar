@@ -171,7 +171,7 @@ class Deforestation
             country = await countriesData.getByCode(countryList.code);
         this.console(`COUNTRY IS: ${countryList.name}.`);
 
-        let gladLatest = this.glad.getLatest();
+        let gladLatest = await this.glad.getLatest();
 
         if (gladLatest.getTime() > memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY OUTDATED.`);
@@ -179,15 +179,17 @@ class Deforestation
             // Fetch GLAD
             this.console('FETCHING FROM GLAD API.');
             let gladPeriod = this.glad.formatPeriod(gladLatest);
-            let gladArea = this.glad.getAlerts(gladPeriod, this.env.delay);
+            let gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay);
+            this.console(`AREA IS: ${gladArea}`);
 
             // Get deforestated area in comparison to country forest area
             let ratio = gladArea * 100 / countryList.area,
                 deforestationArea = ratio * country.area / 100;
             
             // Get map with deforestated area
-            let map = await this.map.setCountry(country.alpha3Code).
-                paintArea(deforestationArea, this.env.deforestatedColor);
+            let map = await this.map.setCountry(country.alpha3Code);
+            map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
+
             this.console('GENERATED MAP.');
 
                 // Calc area in km
