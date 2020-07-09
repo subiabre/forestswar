@@ -169,23 +169,25 @@ class GLAD
      */
     async getAlerts(period, delay = 400)
     {
+        let alerts = 0;
+        let countryList = require('country-list').getCodes();
+
         return new Promise((resolve, reject) => {
-            let countryList = require('country-list');
-            let countries = countryList.getCodes().length;
-            let alerts = 0;
-
-            countryList.getCodes().forEach(async (country, index) => {
+            countryList.forEach(async (country, index) => {
                 country = await this.countryISO3(country);
-                index = index + 1;
-
+    
                 // Set delay to not overflow the server
                 setTimeout(async () => {
-                    alerts += await this.getAlertsCountry(country, period);
+                    let area = await this.getAlertsCountry(country, period);
+                    
+                    alerts += area;
+                    index++;
 
-                    if (index > countries -1) {
+                    console.log(`Area: ${alerts}`);
+
+                    if (index == countryList.length) {
                         resolve(alerts);
                     }
-
                 }, delay * (index));
             });
         });
