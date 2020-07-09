@@ -181,13 +181,11 @@ class GLAD
                     let area = await this.getAlertsCountry(country, period);
                     
                     alerts += area;
+                    index++;
 
-                    if (index == countryList.length - 1) {
+                    if (index == countryList.length) {
                         resolve(alerts);
-                    } else {
-                        index++;
                     }
-
                 }, delay * (index));
             });
         });
