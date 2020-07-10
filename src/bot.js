@@ -185,8 +185,11 @@ class Deforestation
                 gladAreaString = Math.round(gladArea).toLocaleString();
             this.console(`AREA IS: ${gladArea}`);
 
+            // Sum new deforestated area to previously deforestated area
+            let countryDeforestatedArea = gladArea + memory.countryDeforestatedArea;
+
             // Get deforestated area in comparison to country forest area
-            let ratio = gladArea * 100 / countryList.area,
+            let ratio = countryDeforestatedArea * 100 / countryList.area,
                 deforestationArea = ratio * country.area / 100;
                 deforestationArea += memory.countryDeforestatedArea;
             
@@ -195,12 +198,9 @@ class Deforestation
                 map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
             this.console('GENERATED MAP.');
 
-                // Calc area in km
-            let gladAreaKm = gladArea.toLocaleString(),
-                // Calc difference between country forestal area and new deforestated area
-                remainingArea = countryList.area - gladArea,
-                // Calc remaining in km
-                remainingAreaKm = remainingArea.toLocaleString();
+            // Calc difference between country forestal area and new deforestated area
+            let remainingArea = countryList.area - countryDeforestatedArea,
+                remainingAreaString = remainingArea.toLocaleString();
             
             // Write message
             var message = `${gladAreaKm}km² deforestated globally since the last update. Compared to map of #${countryList.name}. ${remainingAreaKm}km² remaining. #deforestation`;
@@ -220,7 +220,7 @@ class Deforestation
                     gladLatest: gladLatest,
                     country: memory.country,
                     area: gladArea,
-                    countryDeforestatedArea: deforestationArea
+                    countryDeforestatedArea: countryDeforestatedArea
                 })
             ;
 
