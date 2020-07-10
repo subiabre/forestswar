@@ -173,18 +173,18 @@ class Deforestation
         if (gladLatest.getTime() > memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY OUTDATED.`);
 
-            // Obtain country code and data
-            let countriesData = new Country,
-                countryList = this.list[memory.country],
-                country = await countriesData.getByCode(countryList.code);
-            this.console(`COUNTRY IS: ${countryList.name}.`);
-
             // Fetch GLAD
             this.console('FETCHING FROM GLAD API.');
             let gladPeriod = this.glad.formatPeriod(gladLatest),
                 gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
                 gladAreaString = Math.round(gladArea).toLocaleString();
             this.console(`AREA IS: ${gladArea}`);
+
+            // Fetch countries
+            let countriesData = new Country,
+                countryList = this.list[memory.country],
+                country = await countriesData.getByCode(countryList.code);
+            this.console(`COUNTRY IS: ${countryList.name}.`);
 
             // Sum new deforestated area to previously deforestated area
             let countryDeforestatedArea = gladArea + memory.countryDeforestatedArea;
