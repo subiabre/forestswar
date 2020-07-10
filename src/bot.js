@@ -246,7 +246,7 @@ class Deforestation
                 if (!memory) {
                     memory = new Memory({
                         date: this.glad.formatDate(new Date()),
-                        gladDate: this.env.startDate,
+                        gladLatest: this.env.startDate,
                         country: 0,
                         area: 0
                     });
