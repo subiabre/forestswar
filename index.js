@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
 
 var listener = app.listen(process.env.PORT, async () => {
     let address = 'http://localhost:' + listener.address().port;
-    console.log('SERVER LISTENING AT: ' + address);
+    bot.console('SERVER LISTENING AT: ' + address);
 
     await bot.routine();
 });
