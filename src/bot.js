@@ -204,14 +204,14 @@ class Deforestation
                 remainingAreaString = remainingArea.toLocaleString();
             
             // Write message
-            var message = `${gladAreaKm}km² deforestated globally since ${gladLatestString}. Compared to map of #${countryList.name}. ${remainingAreaKm}km² remaining. #deforestation`;
+            var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}. Compared to map of #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
 
             if (countryList.area < gladArea) {
                 // Move country memory pointer to the next one
                 memory.country += 1;
 
                 let countries = this.list.length - memory.country;
-                message = `${gladAreaKm}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
+                message = `${gladAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
             }
 
             await this.updateTwitter(map, message);
