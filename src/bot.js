@@ -217,7 +217,8 @@ class Deforestation
                     date: this.glad.formatDate(new Date()),
                     gladLatest: gladLatest,
                     country: memory.country,
-                    area: gladArea
+                    area: gladArea,
+                    countryDeforestatedArea: deforestationArea
                 })
             ;
 
@@ -248,7 +249,8 @@ class Deforestation
                         date: this.glad.formatDate(new Date()),
                         gladLatest: this.env.startDate,
                         country: 0,
-                        area: 0
+                        area: 0,
+                        countryDeforestatedArea: 0
                     });
 
                     memory.save();
