@@ -164,17 +164,17 @@ class Deforestation
         let memory = await this.getMemory();
         this.console('MEMORY READ: OK.');
 
-        // Obtain country code and data
-        let Country = require('./service/country'),
-            countriesData = new Country(),
-            countryList = this.list[memory.country],
-            country = await countriesData.getByCode(countryList.code);
-        this.console(`COUNTRY IS: ${countryList.name}.`);
-
         let gladLatest = await this.glad.getLatest();
 
         if (gladLatest.getTime() > memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY OUTDATED.`);
+
+            // Obtain country code and data
+            let Country = require('./service/country'),
+                countriesData = new Country(),
+                countryList = this.list[memory.country],
+                country = await countriesData.getByCode(countryList.code);
+            this.console(`COUNTRY IS: ${countryList.name}.`);
 
             // Fetch GLAD
             this.console('FETCHING FROM GLAD API.');
@@ -223,9 +223,9 @@ class Deforestation
             ;
 
             newMemory.save();
-            this.console('BOT MEMORY UPDATED.');
         }
 
+        this.console('BOT MEMORY UPDATED.');
         this.console('BOT ROUTINE FINISHED.');
     }
 
