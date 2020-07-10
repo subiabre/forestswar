@@ -180,8 +180,9 @@ class Deforestation
 
             // Fetch GLAD
             this.console('FETCHING FROM GLAD API.');
-            let gladPeriod = this.glad.formatPeriod(gladLatest);
-            let gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay);
+            let gladPeriod = this.glad.formatPeriod(gladLatest),
+                gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
+                gladAreaString = Math.round(gladArea).toLocaleString();
             this.console(`AREA IS: ${gladArea}`);
 
             // Get deforestated area in comparison to country forest area
