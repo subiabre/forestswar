@@ -24,6 +24,12 @@ var memorySchema = new Schema({
     area: {
         type: Number,
         default: 0
+    },
+
+    countryDeforestatedArea: {
+        type: Number,
+        default: 0,
+        required: true
     }
 });
 
