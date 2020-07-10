@@ -206,7 +206,8 @@ class Deforestation
             // Write message
             var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}. Compared to map of #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
 
-            if (countryList.area < gladArea) {
+            // Country is deforestated
+            if (countryList.area < countryDeforestatedArea) {
                 // Move country memory pointer to the next one
                 memory.country += 1;
 
