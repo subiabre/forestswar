@@ -201,7 +201,7 @@ class Deforestation
 
             // Calc difference between country forestal area and new deforestated area
             let remainingArea = countryList.area - countryDeforestatedArea,
-                remainingAreaString = remainingArea.toLocaleString();
+                remainingAreaString = Math.round(remainingArea).toLocaleString();
             
             // Write message
             var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}. Compared to map of #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
