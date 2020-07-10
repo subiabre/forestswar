@@ -192,8 +192,7 @@ class Deforestation
             
             // Get map with deforestated area
             let map = await this.map.setCountry(country.alpha3Code);
-            map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
-
+                map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
             this.console('GENERATED MAP.');
 
                 // Calc area in km
