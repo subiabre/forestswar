@@ -167,7 +167,8 @@ class Deforestation
         let memory = await this.getMemory();
         this.console('MEMORY READ: OK.');
 
-        let gladLatest = await this.glad.getLatest();
+        let gladLatest = await this.glad.getLatest(),
+            gladLatestString = gladLatest.toLocaleDateString();
 
         if (gladLatest.getTime() > memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY OUTDATED.`);
@@ -203,7 +204,7 @@ class Deforestation
                 remainingAreaString = remainingArea.toLocaleString();
             
             // Write message
-            var message = `${gladAreaKm}km² deforestated globally since the last update. Compared to map of #${countryList.name}. ${remainingAreaKm}km² remaining. #deforestation`;
+            var message = `${gladAreaKm}km² deforestated globally since ${gladLatestString}. Compared to map of #${countryList.name}. ${remainingAreaKm}km² remaining. #deforestation`;
 
             if (countryList.area < gladArea) {
                 // Move country memory pointer to the next one
