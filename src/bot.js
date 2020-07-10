@@ -42,7 +42,7 @@ class Deforestation
         });
 
         if (this.env.logging) {
-            console.log(message);
+            console.log(this.consoleLog[this.consoleLog.length - 1]);
         }
     }
 
