@@ -210,7 +210,7 @@ class Deforestation
                 message = `${gladAreaKm}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
             }
 
-            this.updateTwitter(map, message);
+            await this.updateTwitter(map, message);
             
             let Memory = require('./model/memory'),
                 newMemory = new Memory({
@@ -226,7 +226,6 @@ class Deforestation
         }
 
         this.console('BOT ROUTINE FINISHED.');
-        return;
     }
 
     /**
