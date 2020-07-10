@@ -1,3 +1,10 @@
+const 
+    Country = require('./service/country'),
+    Memory = require('./model/memory'),
+    Twitter = require('twitter'),
+    GLAD = require('./service/glad'),
+    Mapper = require('./service/mapper');
+
 /**
  * Deforestation
  * 
@@ -109,7 +116,6 @@ class Deforestation
             });
         }
         
-        let Twitter = require('twitter');
         this.twitter = new Twitter({
             consumer_key: this.env.twitter.consumerKey,
             consumer_secret: this.env.twitter.consumerSecret,
@@ -120,9 +126,6 @@ class Deforestation
         this.http = require('http');
 
         this.countries = require('country-list');
-
-        let GLAD = require('./service/glad'),
-            Mapper = require('./service/mapper');
 
         let fs = require('fs'),
         fileList = fs.readFileSync('src/list.json');
@@ -170,8 +173,7 @@ class Deforestation
             this.console(`BOT MEMORY OUTDATED.`);
 
             // Obtain country code and data
-            let Country = require('./service/country'),
-                countriesData = new Country(),
+            let countriesData = new Country,
                 countryList = this.list[memory.country],
                 country = await countriesData.getByCode(countryList.code);
             this.console(`COUNTRY IS: ${countryList.name}.`);
@@ -212,8 +214,7 @@ class Deforestation
 
             await this.updateTwitter(map, message);
             
-            let Memory = require('./model/memory'),
-                newMemory = new Memory({
+            let newMemory = new Memory({
                     date: this.glad.formatDate(new Date()),
                     gladLatest: gladLatest,
                     country: memory.country,
@@ -236,8 +237,7 @@ class Deforestation
     getMemory()
     {
         return new Promise((resolve, reject) => {
-            let Memory = require('./model/memory'),
-                sorting = { sort: { '_id': -1 } };
+            let sorting = { sort: { '_id': -1 } };
 
             Memory.findOne({}, {}, sorting, (error, memory) => {
                 if (error) {
