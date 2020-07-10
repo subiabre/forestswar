@@ -180,6 +180,13 @@ class Deforestation
                 gladAreaString = Math.round(gladArea).toLocaleString();
             this.console(`AREA IS: ${gladArea}`);
 
+            // Exit on GLAD API problems
+            if (gladArea < 1) {
+                this.console('GLAD API ERROR. EXITING ROUTINE.');
+
+                return;
+            }
+
             // Fetch countries
             let countriesData = new Country,
                 countryList = this.list[memory.country],
