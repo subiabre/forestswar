@@ -215,6 +215,8 @@ class Deforestation
                 message = `${gladAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
             }
 
+            this.console(message);
+
             await this.updateTwitter(map, message);
             
             let newMemory = new Memory({
