@@ -168,7 +168,12 @@ class Deforestation
         this.console('MEMORY READ: OK.');
 
         let gladLatest = await this.glad.getLatest(),
-            gladLatestString = gladLatest.toLocaleDateString();
+            gladLatestString = gladLatest.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
 
         if (gladLatest.getTime() > memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY OUTDATED.`);
