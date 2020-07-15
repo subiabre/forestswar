@@ -217,10 +217,10 @@ class Deforestation
             this.console('GENERATED MAP.');
             
             // Write message
-            var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}. Compared to map of #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
+            var message = `${newAreaString}km² deforestated globally since last update. ${gladAreaString} in total since 2015. Compared to map of #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
 
             // Country is deforestated
-            if (countryList.area < countryDeforestatedArea) {
+            if (remainingArea < 0) {
                 // Move country memory pointer to the next one
                 memory.country += 1;
 
