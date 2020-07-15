@@ -180,7 +180,7 @@ class Deforestation
 
             // Fetch GLAD
             this.console('FETCHING FROM GLAD API.');
-            let gladPeriod = this.glad.formatPeriod(gladLatest),
+            let gladPeriod = this.glad.formatPeriod(this.env.startDate),
                 gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
                 gladAreaString = Math.round(gladArea).toLocaleString();
             this.console(`AREA IS: ${gladArea}`);
@@ -198,22 +198,23 @@ class Deforestation
                 country = await countriesData.getByCode(countryList.code);
             this.console(`COUNTRY IS: ${countryList.name}.`);
 
-            // Sum new deforestated area to previously deforestated area
-            let countryDeforestatedArea = gladArea + memory.countryDeforestatedArea;
+            // Calc difference between new deforestated area and previous one
+            let newArea = gladArea - memory.area,
+                newAreaString = Math.round(newArea).toLocaleString();
+
+            // Calc difference between country forestal area and new deforestated area
+            let remainingArea = countryList.area - gladArea,
+                remainingAreaString = Math.round(remainingArea).toLocaleString();
 
             // Get deforestated area in comparison to country forest area
-            let ratio = countryDeforestatedArea * 100 / countryList.area,
+            let ratio = gladArea * 100 / countryList.area,
                 deforestationArea = ratio * country.area / 100;
-                deforestationArea += memory.countryDeforestatedArea;
+                deforestationArea += memory.area;
             
             // Get map with deforestated area
             let map = await this.map.setCountry(country.alpha3Code);
                 map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
             this.console('GENERATED MAP.');
-
-            // Calc difference between country forestal area and new deforestated area
-            let remainingArea = countryList.area - countryDeforestatedArea,
-                remainingAreaString = Math.round(remainingArea).toLocaleString();
             
             // Write message
             var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}. Compared to map of #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
