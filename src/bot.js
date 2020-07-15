@@ -232,13 +232,10 @@ class Deforestation
             await this.updateTwitter(map, message);
             
             let newMemory = new Memory({
-                    date: this.glad.formatDate(new Date()),
-                    gladLatest: gladLatest,
-                    country: memory.country,
-                    area: gladArea,
-                    countryDeforestatedArea: countryDeforestatedArea
-                })
-            ;
+                gladLatest: gladLatest,
+                country: memory.country,
+                area: gladArea,
+            });
 
             newMemory.save();
         }
@@ -263,11 +260,9 @@ class Deforestation
 
                 if (!memory) {
                     memory = new Memory({
-                        date: this.glad.formatDate(new Date()),
                         gladLatest: this.env.startDate,
                         country: 0,
                         area: 0,
-                        countryDeforestatedArea: 0
                     });
 
                     memory.save();
