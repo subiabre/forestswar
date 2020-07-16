@@ -245,7 +245,7 @@ class Bot
      */
     toLocaleDateString(date)
     {
-        return date.toLocaleDateString('en-US', {
+        return new Date(date).toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
