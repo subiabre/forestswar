@@ -241,7 +241,8 @@ class Bot
         await this.updateTwitter(map, message);
         
         let newMemory = new Memory({
-            gladLatest: gladLatest,
+            gladStart: gladStart,
+            gladEnd: gladEnd,
             gladArea: newArea,
             country: memory.country,
             area: gladArea,
@@ -268,7 +269,8 @@ class Bot
 
                 if (!memory) {
                     memory = new Memory({
-                        gladLatest: this.env.startDate,
+                        gladStart: new Date(this.env.startDate),
+                        gladEnd: new Date,
                         gladArea: 0,
                         country: 0,
                         area: 0,
