@@ -58,6 +58,12 @@ If you think this project could be better, Issues and Pull Requests are open.
 ### Concerns about accuracy and processing of data:
 The following are some notes on this project's data usage with explanations about why they occur and how does this project attempt to fix them.
 
+#### Data changes in the same periods
+
+Due to unknown causes the GFW API presents frequent and irregular data changes, showing different ammounts of data loss or additions on requests in the same timespan for the same period. Bot is designed to minimize this data loss from the GFW API by only using the accumulated area since an start date on it's routine.
+
+This data inconsistency is believed to be due to new alerts being issued under the same day, and is consistent with the percentage of false accuracy [described by GFW](https://blog.globalforestwatch.org/data-and-research/how-accurate-is-accurate-enough-examining-the-glad-global-tree-cover-change-data-part-1), so it's not expected to be fixed in any near future despite the API being in beta. Also despite this fact, this data source remains the most accurate when tracking global change of forests.
+
 #### Possibly misleading maps
 In order to picture a better deforestation comparison, the bot uses the country's **forest surface** instead of the total surface when drawing maps. This means that a map of a country fully red is not equivalent to the entire area of the country being deforestated, as it could be the impression, but rather is the entire forestal area of the country being deforestated.
 
