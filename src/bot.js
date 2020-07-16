@@ -215,7 +215,7 @@ class Bot
             this.console('GENERATED MAP.');
             
             // Write message
-            var message = `${newAreaString}km² deforestated globally since last update. ${gladAreaString} in total since 2015. Compared to map of #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
+            var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
 
             // Country is deforestated
             if (remainingArea < 0) {
@@ -223,7 +223,7 @@ class Bot
                 memory.country += 1;
 
                 let countries = this.list.length - memory.country;
-                message = `${gladAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
+                message = `${newAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
             }
 
             this.console(message);
