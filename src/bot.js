@@ -165,13 +165,8 @@ class Bot
         let memory = await this.getMemory();
         this.console('MEMORY READ: OK.');
 
-        let gladLatest = await this.glad.getLatest(),
-            gladLatestString = gladLatest.toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+        // Fetch latest GLAD
+        let gladLatest = await this.glad.getLatest();
 
         if (gladLatest.getTime() > memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY OUTDATED.`);
