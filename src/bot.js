@@ -209,7 +209,6 @@ class Deforestation
             // Get deforestated area in comparison to country forest area
             let ratio = gladArea * 100 / countryList.area,
                 deforestationArea = ratio * country.area / 100;
-                deforestationArea += memory.area;
             
             // Get map with deforestated area
             let map = await this.map.setCountry(country.alpha3Code);
