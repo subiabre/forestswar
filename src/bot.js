@@ -6,17 +6,15 @@ const
     Mapper = require('./service/mapper');
 
 /**
- * Deforestation
- * 
  * A bot to help visualize forest loss accross the globe.
  * In loving memory of my friend @wishiwasrubin
  * 
- * @author Facundo Subiabre
+ * @author Facundo Subiabre (subiabre at gmail dot com)
  * @license MIT
- * @version 1.0
+ * @version 2.2
  * @repository https://gitlab.com/subiabre/deforestation
  */
-class Deforestation
+class Bot
 {
     /**
      * Deforestation bot.
@@ -305,4 +303,4 @@ class Deforestation
     }
 }
 
-module.exports = Deforestation;
+module.exports = new Bot;

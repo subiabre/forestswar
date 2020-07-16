@@ -1,7 +1,6 @@
 var express = require('express'),
     app = express(),
-    Deforestation = require('./src/bot'),
-    bot = new Deforestation();
+    bot = require('./src/bot');
 
 app.get('/', (req, res) => {
     res.send(bot.getLog());
