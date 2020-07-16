@@ -83,8 +83,7 @@ class Bot
             loggingGlad: process.env.LOGGING_GLAD,
 
             delay: process.env.DELAY_MS || 400,
-
-            startDate: process.env.START_DATE,
+            delayDays: process.env.DELAY_DAYS || 7,
 
             deforestatedColor: process.env.DEFORESTATED_COLOR
         }
@@ -166,7 +165,7 @@ class Bot
         this.console('MEMORY READ: OK.');
 
         // Prepare GLAD period
-        let gladDate = new Date().setDate(new Date().getDate() - 7),
+        let gladDate = new Date().setDate(new Date().getDate() - this.env.delayDays),
             gladDateString = this.toLocaleDateString(gladDate);
 
         // Fetch GLAD
@@ -278,7 +277,7 @@ class Bot
 
                 if (!memory) {
                     memory = new Memory({
-                        gladStart: new Date(this.env.startDate),
+                        gladStart: new Date(),
                         gladEnd: new Date,
                         gladArea: 0,
                         country: 0,
