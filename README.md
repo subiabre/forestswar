@@ -3,7 +3,7 @@ A bot to help visualize tree cover loss across the world.
 
 ![logo_300](https://user-images.githubusercontent.com/61125897/76841080-8eb67180-6838-11ea-8173-62c5ef5ce0b0.png)
 
-This package contains the application that runs and serves the Twitter feed at twitter.com/[@ForestsWar](https://twitter.com/ForestsWar). Everyday at 19:00 UTC, this app is run as described in `bot.routine()`.
+This package contains the application that runs and serves the Twitter feed at twitter.com/[@ForestsWar](https://twitter.com/ForestsWar). Everyday at 19:00 UTC this app is run as described in `bot.routine()`.
 
 1. [About](#About)
 2. [Usage](#Usage)
@@ -13,9 +13,9 @@ This package contains the application that runs and serves the Twitter feed at t
 ## About
 I created this bot because I found it hard to visualize just how much area is deforestated in comparisons like "*1 football pitch per minute*". Inspired by a friend's [one](https://gitlab.com/wishiwasrubin/fwbot) and someone else's [bot](https://twitter.com/WorldWarBot).
 
-This bot fetches data from [Global Forests Watch](https://www.globalforestwatch.org/) listening for new deforestation alerts issued. Then it fetches the area lost in every country in the API between the alert issue date and the current date and the aggregated lost area is then compared against the forest area of a country from a [list](https://en.wikipedia.org/wiki/List_of_countries_by_forest_area) of 192 countries.
+This bot fetches data from [Global Forests Watch](https://www.globalforestwatch.org/) listening for new deforestation alerts issued. Then it fetches the area lost in every country in the API since the issued date of the alert and the aggregated lost area is then compared against the forest area of a country from a [list](https://en.wikipedia.org/wiki/List_of_countries_by_forest_area) of 192 countries.
 
-To make the comparisons easy to understand, the bot draws a map using images from [GADM](https://gadm.org/). These maps are a pixel exact representation of the deforestated area against the forest area from that country.
+To make the comparisons easy to understand, the bot draws a map using images from [GADM](https://gadm.org/). These maps are a **pixel exact** representation of the deforestated area against the forest area from that country.
 
 When the data is obtained and the map is drawn, a new status update is sent to [Twitter](https://twitter.com/ForestWar).
 
@@ -23,6 +23,10 @@ When the data is obtained and the map is drawn, a new status update is sent to [
 This package contains some services that could be of great utility for independent researchers and developers, because of that, services are completely decoupled from the bot itself and can be used as standalone packages.
 
 All code is well documented and commented, so it shouldn't be a hassle to work with them.
+
+```console
+$ git clone https://github.com/subiabre/forestswar
+```
 
 Consider the following examples:
 
@@ -60,9 +64,9 @@ The following are some notes on this project's data usage with explanations abou
 
 #### Data changes in the same periods
 
-Due to unknown causes the GFW API presents frequent and irregular data changes, showing different ammounts of data loss or additions on requests in the same timespan for the same period. Bot is designed to minimize this data loss from the GFW API by only using the accumulated area since an start date on it's routine.
+Due to unknown causes the GFW API presents frequent and irregular data changes, showing different ammounts of data loss or additions on requests in the same timespan for the same period. Unfortunately the bot cannot counter-measure this phenomenon. The data shown by @ForestsWar is shown as-is and as it was at the moment of the requests to GFW.
 
-This data inconsistency is believed to be due to new alerts being issued under the same day, and is consistent with the percentage of false accuracy [described by GFW](https://blog.globalforestwatch.org/data-and-research/how-accurate-is-accurate-enough-examining-the-glad-global-tree-cover-change-data-part-1), so it's not expected to be fixed in any near future despite the API being in beta. Also despite this fact, this data source remains the most accurate when tracking global change of forests.
+This data inconsistency is believed to be due to new alerts being issued or dismissed under the same day, and is consistent with the percentage of false accuracy [described by GFW](https://blog.globalforestwatch.org/data-and-research/how-accurate-is-accurate-enough-examining-the-glad-global-tree-cover-change-data-part-1), so it's not expected to be fixed in any near future despite the API being in beta. Also despite this fact, this data source remains the most accurate when tracking global change of forests.
 
 #### Possibly misleading maps
 In order to picture a better deforestation comparison, the bot uses the country's **forest surface** instead of the total surface when drawing maps. This means that a map of a country fully red is not equivalent to the entire area of the country being deforestated, as it could be the impression, but rather is the entire forestal area of the country being deforestated.
