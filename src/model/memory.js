@@ -15,15 +15,24 @@ var memorySchema = new Schema({
     },
 
     /**
-     * @var {Date} gladLatest Date of latest glad alert
+     * @var {Date} gladStart Date of start for the period
      */
-    gladLatest: {
+    gladStart: {
         type: Date,
         required: true
     },
 
     /**
-     * @var {Number} gladArea Aggregated area of deforestation for this country
+     * @var {Date} gladEnd Date of end for the period
+     */
+    gladEnd: {
+        type: Date,
+        required: true
+    },
+
+    /**
+     * @var {Number} gladArea Area of deforestation for the period between gladStart and gladEnd \
+     * at the time the request was made
      */
     gladArea: {
         type: Number,
@@ -41,7 +50,7 @@ var memorySchema = new Schema({
     },
 
     /**
-     * @var {Number} area Area of deforestation
+     * @var {Number} area Aggregated area of deforestation
      */
     area: {
         type: Number,
