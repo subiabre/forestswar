@@ -209,7 +209,7 @@ class Bot
         this.console('GENERATED MAP.');
         
         // Write message
-        var message = `${gladAreaString} deforestated globally in ${gladDateString}, ${totalAreaString} in total against #${countryList.name}. ${remainingAreaString} remaining. #deforestation`;
+        var message = `${gladAreaString} deforestated globally on ${gladDateString}, ${totalAreaString} in total against #${countryList.name}. ${remainingAreaString} remaining. #deforestation`;
 
         // Country is deforestated
         if (remainingArea < 0) {
