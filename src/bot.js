@@ -252,6 +252,20 @@ class Bot
 
         this.console('BOT ROUTINE FINISHED.');
     }
+    
+    /**
+     * Tranform a Date object into a localised string
+     * @param {Date} date Date object
+     */
+    toLocaleDateString(date)
+    {
+        return date.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
 
     /**
      * Obtain the last memory record
