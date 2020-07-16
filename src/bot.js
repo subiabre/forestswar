@@ -166,85 +166,93 @@ class Bot
         this.console('MEMORY READ: OK.');
 
         // Fetch latest alerts
-        let gladLatest = await this.glad.getLatest(),
-            gladLatestString = gladLatest.toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+        let gladLatest = await this.glad.getLatest();
+        this.console(`GLAD LATEST IS: ${gladLatest}`);
 
-        if (gladLatest.getTime() > memory.gladLatest.getTime()) {
-            this.console(`BOT MEMORY OUTDATED.`);
-
-            // Fetch GLAD
-            this.console('FETCHING FROM GLAD API.');
-            this.console(`START DATE IS: ${gladLatest}`);
+        // Get back 7 days to avoid unreliable data
+        gladLatest.setDate(gladLatest.getDate() - 7);
             
-            let gladPeriod = this.glad.formatPeriod(gladLatest),
-                gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
-                gladAreaString = Math.round(gladArea).toLocaleString();
-            this.console(`AREA IS: ${gladArea}`);
+        let gladLatestString = gladLatest.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
 
-            // Exit on GLAD API problems
-            if (gladArea < 1) {
-                this.console('GLAD API ERROR. EXITING ROUTINE.');
+        if (gladLatest.getTime() < memory.gladLatest.getTime()) {
+            this.console(`BOT MEMORY UPDATED.`);
 
-                return;
-            }
-
-            // Fetch countries
-            let countriesData = new Country,
-                countryList = this.list[memory.country],
-                country = await countriesData.getByCode(countryList.code);
-            this.console(`COUNTRY IS: ${countryList.name}.`);
-
-            // Calc aggregated area of deforestation
-            let newArea = gladArea + memory.gladArea,
-                newAreaString = Math.round(newArea).toLocaleString();
-
-            // Calc difference between country forestal area and new deforestated area
-            let remainingArea = countryList.area - newArea,
-                remainingAreaString = Math.round(remainingArea).toLocaleString();
-
-            // Get deforestated area in comparison to country forest area
-            let ratio = newArea * 100 / countryList.area,
-                deforestationArea = ratio * country.area / 100;
-            
-            // Get map with deforestated area
-            let map = await this.map.setCountry(country.alpha3Code);
-                map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
-            this.console('GENERATED MAP.');
-            
-            // Write message
-            var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
-
-            // Country is deforestated
-            if (remainingArea < 0) {
-                // Move country memory pointer to the next one
-                memory.country += 1;
-                // Reset aggregated area
-                newArea = 0;
-
-                let countries = this.list.length - memory.country;
-                message = `${newAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
-            }
-
-            this.console(message);
-
-            await this.updateTwitter(map, message);
-            
-            let newMemory = new Memory({
-                gladLatest: gladLatest,
-                gladArea: newArea,
-                country: memory.country,
-                area: gladArea,
-            });
-
-            newMemory.save();
+            return;
+        } else {
+            this.console('BOT MEMORY OUTDATED.');
         }
 
-        this.console('BOT MEMORY UPDATED.');
+        // Fetch GLAD
+        this.console('FETCHING FROM GLAD API.');
+        this.console(`START DATE IS: ${gladLatest}`);
+        
+        let gladPeriod = this.glad.formatPeriod(gladLatest),
+            gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
+            gladAreaString = Math.round(gladArea).toLocaleString();
+        this.console(`AREA IS: ${gladArea}`);
+
+        // Exit on GLAD API problems
+        if (gladArea < 1) {
+            this.console('GLAD API ERROR. EXITING ROUTINE.');
+
+            return;
+        }
+
+        // Fetch countries
+        let countriesData = new Country,
+            countryList = this.list[memory.country],
+            country = await countriesData.getByCode(countryList.code);
+        this.console(`COUNTRY IS: ${countryList.name}.`);
+
+        // Calc aggregated area of deforestation
+        let newArea = gladArea + memory.gladArea,
+            newAreaString = Math.round(newArea).toLocaleString();
+
+        // Calc difference between country forestal area and new deforestated area
+        let remainingArea = countryList.area - newArea,
+            remainingAreaString = Math.round(remainingArea).toLocaleString();
+
+        // Get deforestated area in comparison to country forest area
+        let ratio = newArea * 100 / countryList.area,
+            deforestationArea = ratio * country.area / 100;
+        
+        // Get map with deforestated area
+        let map = await this.map.setCountry(country.alpha3Code);
+            map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
+        this.console('GENERATED MAP.');
+        
+        // Write message
+        var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
+
+        // Country is deforestated
+        if (remainingArea < 0) {
+            // Move country memory pointer to the next one
+            memory.country += 1;
+            // Reset aggregated area
+            newArea = 0;
+
+            let countries = this.list.length - memory.country;
+            message = `${newAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
+        }
+
+        this.console(message);
+
+        await this.updateTwitter(map, message);
+        
+        let newMemory = new Memory({
+            gladLatest: gladLatest,
+            gladArea: newArea,
+            country: memory.country,
+            area: gladArea,
+        });
+
+        newMemory.save();
+
         this.console('BOT ROUTINE FINISHED.');
     }
 
