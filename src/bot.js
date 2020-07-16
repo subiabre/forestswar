@@ -192,15 +192,15 @@ class Bot
         this.console(`COUNTRY IS: ${countryList.name}.`);
 
         // Calc aggregated area of deforestation
-        let newArea = gladArea + memory.gladArea,
-            newAreaString = this.toLocaleAreaString(newArea);
+        let totalArea = gladArea + memory.area,
+            totalAreaString = this.toLocaleAreaString(totalArea);
 
         // Calc difference between country forestal area and new deforestated area
-        let remainingArea = countryList.area - newArea,
+        let remainingArea = countryList.area - totalArea,
             remainingAreaString = this.toLocaleAreaString(remainingArea);
 
         // Get deforestated area in comparison to country forest area
-        let ratio = newArea * 100 / countryList.area,
+        let ratio = totalArea * 100 / countryList.area,
             deforestationArea = ratio * country.area / 100;
         
         // Get map with deforestated area
@@ -209,17 +209,17 @@ class Bot
         this.console('GENERATED MAP.');
         
         // Write message
-        var message = `${gladAreaString} deforestated globally in ${gladDateString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString} remaining. #deforestation`;
+        var message = `${gladAreaString} deforestated globally in ${gladDateString}, ${totalAreaString} in total against #${countryList.name}. ${remainingAreaString} remaining. #deforestation`;
 
         // Country is deforestated
         if (remainingArea < 0) {
             // Move country memory pointer to the next one
             memory.country += 1;
             // Reset aggregated area
-            newArea = 0;
+            totalArea = 0;
 
             let countries = this.list.length - memory.country;
-            message = `${newAreaString} deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
+            message = `${totalAreaString} deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
         }
 
         this.console(message);
@@ -227,11 +227,11 @@ class Bot
         await this.updateTwitter(map, message);
         
         let newMemory = new Memory({
-            gladStart: gladStart,
-            gladEnd: gladEnd,
-            gladArea: newArea,
+            gladStart: gladDate,
+            gladEnd: gladDate,
+            gladArea: gladArea,
             country: memory.country,
-            area: gladArea,
+            area: totalArea,
         });
 
         newMemory.save();
