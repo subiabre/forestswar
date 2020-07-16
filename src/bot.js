@@ -166,19 +166,15 @@ class Bot
         this.console('MEMORY READ: OK.');
 
         // Fetch latest alerts
-        let gladLatest = await this.glad.getLatest();
-        this.console(`GLAD LATEST IS: ${gladLatest}`);
-
-        // Get back 7 days to avoid unreliable data
-        gladLatest.setDate(gladLatest.getDate() - 7);
-            
-        let gladLatestString = gladLatest.toLocaleDateString('en-US', {
+        let gladLatest = await this.glad.getLatest(),
+            gladLatestString = gladLatestWeek.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         });
-
+        
+        // Exit routine if not sure about new updates
         if (gladLatest.getTime() < memory.gladLatest.getTime()) {
             this.console(`BOT MEMORY UPDATED.`);
 
