@@ -178,9 +178,9 @@ class Bot
             gladAreaString = this.toLocaleAreaString(gladArea);
         this.console(`AREA IS: ${gladArea}`);
 
-        // Exit on GLAD API problems
+        // Exit on no deforestated area for this period
         if (gladArea < 1) {
-            this.console('GLAD API ERROR. EXITING ROUTINE.');
+            this.console('NO NEW DEFORESTATION. EXITING ROUTINE.');
 
             return;
         }
