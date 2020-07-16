@@ -179,7 +179,9 @@ class Bot
 
             // Fetch GLAD
             this.console('FETCHING FROM GLAD API.');
-            let gladPeriod = this.glad.formatPeriod(this.gladLatest),
+            this.console(`START DATE IS: ${gladLatest}`);
+            
+            let gladPeriod = this.glad.formatPeriod(gladLatest),
                 gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
                 gladAreaString = Math.round(gladArea).toLocaleString();
             this.console(`AREA IS: ${gladArea}`);
@@ -263,6 +265,7 @@ class Bot
                 if (!memory) {
                     memory = new Memory({
                         gladLatest: this.env.startDate,
+                        gladArea: 0,
                         country: 0,
                         area: 0,
                     });
