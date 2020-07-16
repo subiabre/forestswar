@@ -198,7 +198,7 @@ class Bot
             this.console(`COUNTRY IS: ${countryList.name}.`);
 
             // Calc aggregated area of deforestation
-            let newArea = gladArea + memory.area,
+            let newArea = gladArea + memory.gladArea,
                 newAreaString = Math.round(newArea).toLocaleString();
 
             // Calc difference between country forestal area and new deforestated area
@@ -221,6 +221,8 @@ class Bot
             if (remainingArea < 0) {
                 // Move country memory pointer to the next one
                 memory.country += 1;
+                // Reset aggregated area
+                newArea = 0;
 
                 let countries = this.list.length - memory.country;
                 message = `${newAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
@@ -232,6 +234,7 @@ class Bot
             
             let newMemory = new Memory({
                 gladLatest: gladLatest,
+                gladArea: newArea,
                 country: memory.country,
                 area: gladArea,
             });
