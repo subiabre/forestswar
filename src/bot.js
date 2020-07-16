@@ -189,7 +189,7 @@ class Bot
 
         // Fetch GLAD
         this.console('FETCHING FROM GLAD API.');
-        this.console(`START DATE IS: ${gladLatest}`);
+        this.console(`START DATE IS: ${gladLatestString}`);
         
         let gladPeriod = this.glad.formatPeriod(gladLatest),
             gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
