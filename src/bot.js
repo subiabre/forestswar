@@ -175,7 +175,7 @@ class Bot
         
         let gladPeriod = this.glad.formatPeriod(gladDate, gladDate),
             gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
-            gladAreaString = Math.round(gladArea).toLocaleString();
+            gladAreaString = this.toLocaleAreaString(gladArea);
         this.console(`AREA IS: ${gladArea}`);
 
         // Exit on GLAD API problems
@@ -193,11 +193,11 @@ class Bot
 
         // Calc aggregated area of deforestation
         let newArea = gladArea + memory.gladArea,
-            newAreaString = Math.round(newArea).toLocaleString();
+            newAreaString = this.toLocaleAreaString(newArea);
 
         // Calc difference between country forestal area and new deforestated area
         let remainingArea = countryList.area - newArea,
-            remainingAreaString = Math.round(remainingArea).toLocaleString();
+            remainingAreaString = this.toLocaleAreaString(remainingArea);
 
         // Get deforestated area in comparison to country forest area
         let ratio = newArea * 100 / countryList.area,
@@ -209,7 +209,7 @@ class Bot
         this.console('GENERATED MAP.');
         
         // Write message
-        var message = `${gladAreaString}km² deforestated globally in ${gladDateString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
+        var message = `${gladAreaString} deforestated globally in ${gladDateString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString} remaining. #deforestation`;
 
         // Country is deforestated
         if (remainingArea < 0) {
@@ -219,7 +219,7 @@ class Bot
             newArea = 0;
 
             let countries = this.list.length - memory.country;
-            message = `${newAreaString}km² deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
+            message = `${newAreaString} deforestated, #${countryList.name} has been deforestated. ${countries} countries remaining. #deforestation`;
         }
 
         this.console(message);
@@ -251,6 +251,15 @@ class Bot
             month: 'long',
             day: 'numeric'
         });
+    }
+
+    /**
+     * Transform an area number into a localised string
+     * @param {Number} area 
+     */
+    toLocaleAreaString(area)
+    {
+        return Math.round(area).toLocaleString() + 'km²';
     }
 
     /**
