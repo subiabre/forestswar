@@ -21,6 +21,15 @@ var memorySchema = new Schema({
         type: Date,
         required: true
     },
+
+    /**
+     * @var {Number} gladArea Aggregated area of deforestation for this country
+     */
+    gladArea: {
+        type: Number,
+        default: 0,
+        required: true
+    },
     
     /**
      * @var {Number} country List index of the country
