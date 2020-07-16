@@ -165,29 +165,15 @@ class Bot
         let memory = await this.getMemory();
         this.console('MEMORY READ: OK.');
 
-        // Fetch latest alerts
-        let gladLatest = await this.glad.getLatest(),
-            gladLatestString = gladLatestWeek.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        
-        // Exit routine if not sure about new updates
-        if (gladLatest.getTime() < memory.gladLatest.getTime()) {
-            this.console(`BOT MEMORY UPDATED.`);
-
-            return;
-        } else {
-            this.console('BOT MEMORY OUTDATED.');
-        }
+        // Prepare GLAD period
+        let gladDate = new Date().setDate(new Date().getDate() - 7),
+            gladDateString = this.toLocaleDateString(gladDate);
 
         // Fetch GLAD
         this.console('FETCHING FROM GLAD API.');
-        this.console(`START DATE IS: ${gladLatestString}`);
+        this.console(`DATE IS: ${gladDateString}`);
         
-        let gladPeriod = this.glad.formatPeriod(gladLatest),
+        let gladPeriod = this.glad.formatPeriod(gladDate, gladDate),
             gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
             gladAreaString = Math.round(gladArea).toLocaleString();
         this.console(`AREA IS: ${gladArea}`);
@@ -223,7 +209,7 @@ class Bot
         this.console('GENERATED MAP.');
         
         // Write message
-        var message = `${gladAreaString}km² deforestated globally since ${gladLatestString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
+        var message = `${gladAreaString}km² deforestated globally in ${gladDateString}, ${newAreaString} in total against #${countryList.name}. ${remainingAreaString}km² remaining. #deforestation`;
 
         // Country is deforestated
         if (remainingArea < 0) {
