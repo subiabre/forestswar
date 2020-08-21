@@ -87,32 +87,34 @@ class Mapper
 
     /**
      * Replace the pixels on the map with deforestaded pixels
-     * @param {Jimp} map Jimp object
+     * @param {Mapper} map Mapper instance
      * @param {Number} area Deforestated area
-     * @param {Number} ppkm Map ratio of kilometers to pixels
      * @param {String} color Deforestated area color
      * @param {String} landColor Land color
      * @returns {Jimp}
      */
-    async paintArea(map, area, ppkm, color = '#f60b2a', landColor = '#D3D3D3')
+    async paintArea(map, area, color = '#f60b2a', landColor = '#D3D3D3')
     {
-        let paintArea = area * ppkm,
+        let km = await map.kilometersToPixels(),
+            image = await map.fetchGADM();
+
+        let paintArea = area * km.ppkm,
             land = Jimp.cssColorToHex(landColor),
             hexCode = Jimp.cssColorToHex(color),
             x = 0,
             y = 0;
 
         // Parse image top to bottom
-        while (map.bitmap.height >= y) {
+        while (image.bitmap.height >= y) {
             // Paint land pixels
-            let pixel = map.getPixelColor(x, y);
+            let pixel = image.getPixelColor(x, y);
             if (pixel == land && paintArea > 0) {
-                map.setPixelColor(hexCode, x, y);
+                image.setPixelColor(hexCode, x, y);
                 paintArea -= 1;
             }
 
             // Move to the next column
-            if (map.bitmap.height == y && map.bitmap.width > x) {
+            if (image.bitmap.height == y && image.bitmap.width > x) {
                 x++;
                 y = 0;
             // or to the next pixel
@@ -121,7 +123,7 @@ class Mapper
             }
         }
 
-        return map;
+        return image;
     }
 }
 

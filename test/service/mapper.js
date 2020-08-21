@@ -20,9 +20,7 @@ describe('Service: mapper', () => {
         var Jimp = require('jimp');
 
         var mapper = new Mapper('AND');
-        var image = await mapper.fetchGADM();
-        var km = await mapper.kilometersToPixels();
-        var map = await mapper.paintArea(image, 400, km.ppkm, '#19191F');
+        var map = await mapper.paintArea(mapper, 400, '#19191F');
 
         assert.isObject(map);
         assert.exists(map.bitmap);
