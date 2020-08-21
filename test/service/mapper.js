@@ -17,9 +17,12 @@ describe('Service: mapper', () => {
     it ('should paint the given area inside the country', async function() {
         this.timeout(10000);
 
-        var mapper = new Mapper('AND');
         var Jimp = require('jimp');
-        var map = await mapper.paintArea(400, '#19191F');
+
+        var mapper = new Mapper('AND');
+        var image = await mapper.fetchGADM();
+        var km = await mapper.kilometersToPixels();
+        var map = await mapper.paintArea(image, 400, km.ppkm, '#19191F');
 
         assert.isObject(map);
         assert.exists(map.bitmap);

@@ -87,17 +87,15 @@ class Mapper
 
     /**
      * Replace the pixels on the map with deforestaded pixels
+     * @param {Jimp} map Jimp object
      * @param {Number} area Deforestated area
+     * @param {Number} ppkm Map ratio of kilometers to pixels
      * @param {String} color Deforestated area color
      * @returns {Jimp}
      */
-    async paintArea(area, color = '#f60b2a')
+    async paintArea(map, area, ppkm, color = '#f60b2a')
     {
-        let Jimp = require('jimp');
-        let map = await this.fetchGADM();
-        let country = await this.kilometersToPixels();
-
-        let paintArea = area * country.ppkm,
+        let paintArea = area * ppkm,
             land = Jimp.cssColorToHex('#D3D3D3'),
             hexCode = Jimp.cssColorToHex(color),
             x = 0,
