@@ -187,9 +187,8 @@ class Bot
         }
 
         // Fetch countries
-        let countriesData = new Country,
-            countryList = this.list[memory.country],
-            country = await countriesData.getByCode(countryList.code);
+        let countryList = this.list[memory.country],
+            country = await new Country(countryList.code).getByCode();
         this.console(`COUNTRY IS: ${countryList.name}.`);
 
         // Calc aggregated area of deforestation
@@ -202,21 +201,23 @@ class Bot
 
         // Calc total deforestated area in comparison to country forest area
         let ratioTotal = memory.area * 100 / countryList.area,
-            deforestationArea = ratioTotal * country.area / 100;
+            deforestationArea = ratioTotal * country.data.area / 100;
         
         // Calc new deforestated area in comparison to country forest area
         let ratioNew = gladArea * 100 / countryList.area,
-            deforestationAreaNew = ratioNew * country.area / 100;
+            deforestationAreaNew = ratioNew * country.data.area / 100;
         
         // Get map with deforestated area
-        let map = new Mapper(country.alpha3Code),
-            gadm = await map.fetchGADM(),
-            land = await map.kilometersToPixels();
+        let mapper = new Mapper(),
+            image = await country.getMapImage(),
+            pixelsAll = await mapper.kilometersToPixels(country.data.area, country),
+            pixelsPrevious = await mapper.kilometersToPixels(deforestationArea, country),
+            pixelsCurrent = await mapper.kilometersToPixels(deforestationAreaNew, country);
         
         // Paint map
-        let image = await map.paintArea(gadm, land.kilometers, km.ppkm, this.env.grassColor);
-            image = await map.paintArea(image, deforestationArea, land.ppkm, this.env.deforestatedColor, this.env.grassColor);
-            image = await map.paintArea(image, deforestationAreaNew, land.ppkm, this.env.deforestatedColorPrevious, this.env.grassColor);
+        let map = await map.paintArea(image, pixelsAll, this.env.grassColor);
+            map = await map.paintArea(map, pixelsPrevious, land.ppkm, this.env.deforestatedColor, this.env.grassColor);
+            map = await map.paintArea(map, pixelsCurrent, land.ppkm, this.env.deforestatedColorPrevious, this.env.grassColor);
         this.console('GENERATED MAP.');
         
         // Write message
