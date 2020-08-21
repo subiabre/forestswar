@@ -215,9 +215,9 @@ class Bot
             pixelsCurrent = await mapper.kilometersToPixels(deforestationAreaNew, country);
         
         // Paint map
-        let map = await map.paintArea(image, pixelsAll, this.env.grassColor);
-            map = await map.paintArea(map, pixelsPrevious, land.ppkm, this.env.deforestatedColor, this.env.grassColor);
-            map = await map.paintArea(map, pixelsCurrent, land.ppkm, this.env.deforestatedColorPrevious, this.env.grassColor);
+        let map = await mapper.paintArea(image, pixelsAll, this.env.grassColor);
+            map = await mapper.paintArea(map, pixelsPrevious, this.env.deforestatedColor, this.env.grassColor);
+            map = await mapper.paintArea(map, pixelsCurrent, this.env.deforestatedColorPrevious, this.env.grassColor);
         this.console('GENERATED MAP.');
         
         // Write message
