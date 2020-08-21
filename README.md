@@ -20,25 +20,31 @@ To make the comparisons easy to understand, the bot draws a map using images fro
 When the data is obtained and the map is drawn, a new status update is sent to [Twitter](https://twitter.com/ForestWar).
 
 ## Usage
+Before working with this package make sure [Node.js](https://nodejs.org/en/) is installed in your system.
+```bash
+node -v
+```
+
 This package contains some services that could be of great utility for independent researchers and developers, because of that, services are completely decoupled from the bot itself and can be used as standalone packages.
 
 All code is well documented and commented, so it shouldn't be a hassle to work with them.
 
-```console
-$ git clone https://github.com/subiabre/forestswar
+```bash
+git clone https://github.com/subiabre/forestswar
+cd forestswar
+npm install
 ```
 
 Consider the following examples:
 
 1. Generate a map painting 200 square kilometers in Andorra in blue.
 ```js
-const Mapper = require('./src/service/mappper'),
-    mapper = new Mapper();
+const Mapper = require('./src/service/mappper');
 
-let map = await mapper.setCountry('AND')
-    .paintArea(200, '#0000ff');
+let map = new Mapper('AND'),
+    image = await mapper.paintArea(mapper, 200, '#0000ff');
         
-map.write('map/AND.png');
+image.write('map/AND.png');
 ```
 
 2. Obtaining the deforestation for 2015.
