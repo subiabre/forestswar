@@ -40,9 +40,13 @@ Consider the following examples:
 1. Generate a map painting 200 square kilometers in Andorra in blue.
 ```js
 const Mapper = require('./src/service/mappper');
+const Country = require('./src/service/country);
 
-let map = new Mapper('AND'),
-    image = await mapper.paintArea(mapper, 200, '#0000ff');
+let map = new Mapper(),
+    andorra = await new Country('AND').getByCode(),
+    map = await andorra.getMapImage(),
+    area = await mapper.kilometersToPixels(200, andorra)
+    image = await mapper.paintArea(mapper, area, '#0000ff');
         
 image.write('map/AND.png');
 ```
