@@ -91,12 +91,13 @@ class Mapper
      * @param {Number} area Deforestated area
      * @param {Number} ppkm Map ratio of kilometers to pixels
      * @param {String} color Deforestated area color
+     * @param {String} landColor Land color
      * @returns {Jimp}
      */
-    async paintArea(map, area, ppkm, color = '#f60b2a')
+    async paintArea(map, area, ppkm, color = '#f60b2a', landColor = '#D3D3D3')
     {
         let paintArea = area * ppkm,
-            land = Jimp.cssColorToHex('#D3D3D3'),
+            land = Jimp.cssColorToHex(landColor),
             hexCode = Jimp.cssColorToHex(color),
             x = 0,
             y = 0;
