@@ -1,20 +1,33 @@
 "use strict";
 
 /**
+ * REST countries API URI: \
+ * `https://restcountries.eu/rest/v2/`
+ */
+const API = 'http://restcountries.eu/rest/v2/';
+
+/**
+ * GADM URI: \
+ * `https://gadm.org/img/480/gadm/`
+ */
+const GADM = 'https://gadm.org/img/480/gadm/';
+
+const Jimp = require('jimp');
+const http = require('http');
+const { map } = require('../bot');
+
+/**
  * Country data service
  */
 class Country
 {
-    constructor()
+    /**
+     * Get a country data
+     * @param {String} code Country ISO code or name
+     */
+    constructor(code)
     {
-
-        /**
-         * REST countries API URI: \
-         * `https://restcountries.eu/rest/v2/`
-         */
-        this.api = 'http://restcountries.eu/rest/v2/';
-
-        this.http = require('http');
+        this.country = code;
     }
 
     /**
@@ -26,7 +39,7 @@ class Country
     async get(endpoint, countryId)
     {
         return new Promise((resolve, reject) => {
-            this.http.get(this.api + endpoint + '/' + countryId, (res) => {
+            http.get(API + endpoint + '/' + countryId, (res) => {
                 
                 let country = '';
 
@@ -47,24 +60,48 @@ class Country
 
     /**
      * Return a country data as an object by common name
-     * @param {string} country Country name
-     * @returns {object} Country data object
+     * @param {String} country Country name
+     * @returns {Country}
      */
-    async getByName(country)
+    async getByName(country = false)
     {
-        let data = await this.get('name', country);
-        return data[0];
+        if (country) this.country = country;
+
+        this.data = await this.get('name', this.country)[0];
+
+        return this;
     }
 
     /**
      * Return a country data as an object by ISO code
-     * @param {string} country Country code
-     * @returns {object} Country data object
+     * @param {String} country Country code
+     * @returns {Country} 
      */
-    async getByCode(country)
+    async getByCode(country = false)
     {
-        let data = await this.get('alpha', country);
-        return data;
+        if (country) this.country = country;
+
+        this.data = await this.get('alpha', this.country);
+
+        return this;
+    }
+
+    /**
+     * Get this country map image
+     * @returns {Jimp}
+     */
+    async getMapImage()
+    {
+        let country = this.data.alpha3Code,
+            mapUri = GADM + country + '/' + country + '.png';
+
+        return Jimp.read(mapUri)
+            .then(map => {
+                return map;
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
 
