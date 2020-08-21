@@ -92,16 +92,26 @@ class Country
      */
     async getMapImage()
     {
-        let country = this.data.alpha3Code,
-            mapUri = GADM + country + '/' + country + '.png';
+        let uri = this.getMapUrl();
 
-        return Jimp.read(mapUri)
+        return Jimp.read(uri)
             .then(map => {
                 return map;
             })
             .catch(err => {
                 console.log(err);
             });
+    }
+
+    /**
+     * Get the URL to this country map image
+     * @returns {String}
+     */
+    getMapUrl()
+    {
+        let country = this.data.alpha3Code;
+        
+        return GADM + country + '/' + country + '.png';
     }
 }
 
