@@ -85,7 +85,9 @@ class Bot
             delay: process.env.DELAY_MS || 400,
             delayDays: process.env.DELAY_DAYS || 7,
 
-            deforestatedColor: process.env.DEFORESTATED_COLOR
+            grassColor: process.env.GRASS_COLOR,
+            deforestatedColor: process.env.DEFORESTATED_COLOR,
+            deforestatedColorPrevious: process.env.DEFORESTATED_COLOR_OLD
         }
 
         // Start empty log
@@ -198,13 +200,23 @@ class Bot
         let remainingArea = countryList.area - totalArea,
             remainingAreaString = this.toLocaleAreaString(remainingArea);
 
-        // Get deforestated area in comparison to country forest area
-        let ratio = totalArea * 100 / countryList.area,
-            deforestationArea = ratio * country.area / 100;
+        // Calc total deforestated area in comparison to country forest area
+        let ratioTotal = totalArea * 100 / countryList.area,
+            deforestationArea = ratioTotal * country.area / 100;
+        
+        // Calc new deforestated area in comparison to country forest area
+        let ratioNew = gladArea * 100 / countryList.area,
+            deforestationAreaNew = ratioNew * country.area / 100;
         
         // Get map with deforestated area
-        let map = await this.map.setCountry(country.alpha3Code);
-            map = await map.paintArea(deforestationArea, this.env.deforestatedColor);
+        let map = new Mapper(country.alpha3Code),
+            gadm = await map.fetchGADM(),
+            land = await map.kilometersToPixels();
+        
+        // Paint map
+        let image = await map.paintArea(gadm, land.kilometers, km.ppkm, this.env.grassColor);
+            image = await map.paintArea(image, deforestationArea, land.ppkm, this.env.deforestatedColor, this.env.grassColor);
+            image = await map.paintArea(image, deforestationAreaNew, land.ppkm, this.env.deforestatedColorPrevious, this.env.grassColor);
         this.console('GENERATED MAP.');
         
         // Write message
