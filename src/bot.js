@@ -216,8 +216,8 @@ class Bot
         
         // Paint map
         let map = await mapper.paintArea(image, pixelsAll, this.env.grassColor);
-            map = await mapper.paintArea(map, pixelsPrevious, this.env.deforestatedColor, this.env.grassColor);
-            map = await mapper.paintArea(map, pixelsCurrent, this.env.deforestatedColorPrevious, this.env.grassColor);
+            map = await mapper.paintArea(map, pixelsPrevious, this.env.deforestatedColorPrevious, this.env.grassColor);
+            map = await mapper.paintArea(map, pixelsCurrent, this.env.deforestatedColor, this.env.grassColor);
         this.console('GENERATED MAP.');
         
         // Write message
