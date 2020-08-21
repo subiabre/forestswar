@@ -201,7 +201,7 @@ class Bot
             remainingAreaString = this.toLocaleAreaString(remainingArea);
 
         // Calc total deforestated area in comparison to country forest area
-        let ratioTotal = totalArea * 100 / countryList.area,
+        let ratioTotal = memory.area * 100 / countryList.area,
             deforestationArea = ratioTotal * country.area / 100;
         
         // Calc new deforestated area in comparison to country forest area
