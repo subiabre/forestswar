@@ -1,6 +1,15 @@
 "use strict";
 
 /**
+ * GFW API URI: \
+ * `http://production-api.globalforestwatch.org/glad-alerts`
+ */
+const API = 'http://production-api.globalforestwatch.org/glad-alerts';
+
+const http = require('http');
+const Country = require('./country');
+
+/**
  * GLAD API service
  */
 class GLAD
@@ -10,14 +19,6 @@ class GLAD
      */
     constructor(logging = false)
     {
-        /**
-         * GFW API URI: \
-         * `http://production-api.globalforestwatch.org/glad-alerts`
-         */
-        this.api = 'http://production-api.globalforestwatch.org/glad-alerts';
-
-        this.http = require('http');
-
         this.logging = logging;
     }
 
@@ -49,11 +50,9 @@ class GLAD
      */
     async countryISO3(country)
     {
-        let Country = require('./country'),
-            data = new Country();
-            country = await data.getByCode(country);
+        country = await new Country(country).getByCode();
 
-        return country.alpha3Code;
+        return country.data.alpha3Code;
     }
 
     /**
@@ -76,9 +75,9 @@ class GLAD
     async getLatest()
     {
         return new Promise((resolve, reject) => {
-            let api = this.api + '/latest';
+            let api = API + '/latest';
             
-            this.http.get(api, (res) => {
+            http.get(api, (res) => {
                 let alert = '';
 
                 res.on('data', (data) => {
@@ -108,9 +107,9 @@ class GLAD
     async fetchCountry(country, period)
     {
         return new Promise((resolve, reject) => {
-            let api = this.api + '/admin/' + country + period;
+            let api = API + '/admin/' + country + period;
 
-            this.http.get(api, (res) => {
+            http.get(api, (res) => {
                 let alerts = '';
 
                 res.on('data', (data) => {
