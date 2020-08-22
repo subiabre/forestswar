@@ -46,7 +46,7 @@ let map = new Mapper(),
     andorra = await new Country('AND').getByCode(),
     map = await andorra.getMapImage(),
     area = await mapper.kilometersToPixels(200, andorra)
-    image = await mapper.paintArea(mapper, area, '#0000ff');
+    image = await mapper.paintArea(map, area, '#0000ff');
         
 image.write('map/AND.png');
 ```
