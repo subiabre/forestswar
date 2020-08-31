@@ -11,4 +11,5 @@ var listener = app.listen(process.env.PORT, async () => {
     bot.console('SERVER LISTENING AT: ' + address);
 
     await bot.routine();
+    process.exit(1);
 });
