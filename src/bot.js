@@ -324,22 +324,24 @@ class Bot
         let image = await map.getBufferAsync('image/jpeg'),
             params = {media: image};
 
-        if (this.env.twitter.on) {
-            this.twitter.post('media/upload', params, (err, data, res) => {
-                if (err) {
-                    return err;
-                }
-    
-                params = {status: message, media_ids: data.media_id_string};
-                this.twitter.post('statuses/update', params, (err, data, res) => {
+        return new Promise((resolve, reject) => {
+            if (this.env.twitter.on) {
+                this.twitter.post('media/upload', params, (err, data, res) => {
                     if (err) {
-                        return err;
+                        reject(err);
                     }
-    
-                    return false;
+        
+                    params = {status: message, media_ids: data.media_id_string};
+                    this.twitter.post('statuses/update', params, (err, data, res) => {
+                        if (err) {
+                            reject(err);
+                        }
+        
+                        resolve(false);
+                    });
                 });
-            });
-        }
+            }
+        });
     }
 }
 
