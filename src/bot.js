@@ -69,14 +69,14 @@ class Bot
         // Store env vars
         this.env = {
             twitter: {
-                on: process.env.TWITTER,
+                on: process.env.TWITTER == 'true' ? true : false,
                 consumerKey: process.env.TWITTER_CONSUMER_KEY,
                 consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
                 accessTokenKey: process.env.TWITTER_ACCESS_TOKEN_KEY,
                 accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
             },
 
-            database: process.env.DATABASE,
+            database: process.env.DATABASE == 'true' ? true : false,
             databaseUrl: process.env.DATABASE_URL,
 
             logging: process.env.LOGGING,
