@@ -159,7 +159,7 @@ class Bot
         if (!this.env.database) {
             this.console('DATABASE IS REQUIRED TO INIT THE ROUTINE.');
             
-            return;
+            return 1;
         }
         
         // Fetch memory
@@ -183,7 +183,7 @@ class Bot
         if (gladArea < 1) {
             this.console('NO NEW DEFORESTATION. EXITING ROUTINE.');
 
-            return;
+            return 0;
         }
 
         // Fetch countries
@@ -249,6 +249,7 @@ class Bot
         newMemory.save();
 
         this.console('BOT ROUTINE FINISHED.');
+        return 0;
     }
     
     /**

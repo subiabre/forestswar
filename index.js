@@ -10,6 +10,6 @@ var listener = app.listen(process.env.PORT, async () => {
     let address = 'http://localhost:' + listener.address().port;
     bot.console('SERVER LISTENING AT: ' + address);
 
-    await bot.routine();
-    process.exit(1);
+    let routine = await bot.routine();
+    process.exit(routine);
 });
