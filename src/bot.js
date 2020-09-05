@@ -253,7 +253,7 @@ class Bot
             area: totalArea,
         });
 
-        newMemory.save();
+        await newMemory.save();
 
         this.console('BOT ROUTINE FINISHED.');
         return 0;
