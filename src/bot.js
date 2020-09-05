@@ -236,7 +236,14 @@ class Bot
 
         this.console(message);
 
-        await this.updateTwitter(map, message);
+        let updateError = await this.updateTwitter(map, message);
+        if (updateError) {
+            this.console('TWITTER ERROR:' + updateError);
+            
+            return 1;
+        } else {
+            this.console('TWITTER FEED UPDATED.');
+        }
         
         let newMemory = new Memory({
             gladStart: gladDate,
@@ -320,18 +327,16 @@ class Bot
         if (this.env.twitter.on) {
             this.twitter.post('media/upload', params, (err, data, res) => {
                 if (err) {
-                    this.console(err);
-                    return;
+                    return err;
                 }
     
                 params = {status: message, media_ids: data.media_id_string};
                 this.twitter.post('statuses/update', params, (err, data, res) => {
                     if (err) {
-                        this.console(err);
-                        return;
+                        return err;
                     }
     
-                    this.console('TWITTER FEED UPDATED.');
+                    return false;
                 });
             });
         }
