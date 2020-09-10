@@ -13,7 +13,7 @@ This package contains the application that runs and serves the Twitter feed at t
 ## About
 I created this bot because I found it hard to visualize just how much area is deforestated in comparisons like "*1 football pitch per minute*". Inspired by a friend's [one](https://gitlab.com/wishiwasrubin/fwbot) and someone else's [bot](https://twitter.com/WorldWarBot).
 
-This bot fetches data from [Global Forests Watch](https://www.globalforestwatch.org/) listening for new deforestation alerts issued. Then it fetches the area lost in every country in the API since the issued date of the alert and the aggregated lost area is then compared against the forest area of a country from a [list](https://en.wikipedia.org/wiki/List_of_countries_by_forest_area) of 192 countries.
+This bot fetches data from [Global Forests Watch](https://www.globalforestwatch.org/) listening for deforestation in every country in the API in a given date, then the aggregated lost area is compared against the forest area of a country from a [list](https://en.wikipedia.org/wiki/List_of_countries_by_forest_area) of 192 countries.
 
 To make the comparisons easy to understand, the bot draws a map using images from [GADM](https://gadm.org/). These maps are a **pixel exact** representation of the deforestated area against the forest area from that country.
 
