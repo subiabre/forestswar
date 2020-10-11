@@ -215,6 +215,11 @@ class Bot
             pixelsAll = await mapper.kilometersToPixels(country.data.area, country),
             pixelsPrevious = await mapper.kilometersToPixels(deforestationArea, country),
             pixelsCurrent = await mapper.kilometersToPixels(deforestationAreaNew, country);
+
+        // Avoid painting less than one pixel
+        if (pixelsCurrent < 1) {
+            pixelsCurrent = 1;
+        }
         
         // Paint map
         let map = await mapper.paintArea(image, pixelsAll, this.env.grassColor);
