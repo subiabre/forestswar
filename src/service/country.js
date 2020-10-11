@@ -14,7 +14,6 @@ const GADM = 'https://gadm.org/img/480/gadm/';
 
 const Jimp = require('jimp');
 const http = require('http');
-const { map } = require('../bot');
 
 /**
  * Country data service
