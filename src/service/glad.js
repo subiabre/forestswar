@@ -20,6 +20,7 @@ class GLAD
     constructor(logging = false)
     {
         this.logging = logging;
+        this.log = {};
     }
 
     /**
@@ -139,7 +140,7 @@ class GLAD
 
         if (alerts.errors) {
             if (this.logging) {
-                console.log(`${country}: ${alerts.errors[0].detail}`);
+                this.log[country] = alerts.errors[0].detail;
             }
 
             if (alerts.errors[0].status == 500 || alerts.errors[0].status == 404) {
@@ -154,7 +155,7 @@ class GLAD
         let area = this.alertsArea(alerts);
 
         if (this.logging) {
-            console.log(`${country}: ${alerts.data.attributes.value} (${area})`);
+            this.log[country] = area;
         }
 
         return area;
@@ -183,7 +184,10 @@ class GLAD
                     index++;
 
                     if (index == countryList.length) {
-                        resolve(alerts);
+                        resolve({
+                            area: alerts,
+                            log: this.log
+                        });
                     }
                 }, delay * (index));
             });

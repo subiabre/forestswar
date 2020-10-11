@@ -39,6 +39,16 @@ var memorySchema = new Schema({
         default: 0,
         required: true
     },
+
+    /**
+     *  @var {Object} glad Glad log for each country API response \
+     * at the time the request was made
+     */
+    gladLog: {
+        type: Object,
+        default: {},
+        required: false
+    },
     
     /**
      * @var {Number} country List index of the country

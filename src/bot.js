@@ -175,7 +175,9 @@ class Bot
         this.console(`DATE IS: ${gladDateString}`);
         
         let gladPeriod = this.glad.formatPeriod(gladDate, gladDate),
-            gladArea = await this.glad.getAlerts(gladPeriod, this.env.delay),
+            gladResponse = await this.glad.getAlerts(gladPeriod, this.env.delay),
+            gladLog = gladResponse.log,
+            gladArea = gladResponse.area,
             gladAreaString = this.toLocaleAreaString(gladArea);
         this.console(`AREA IS: ${gladArea}`);
 
@@ -249,6 +251,7 @@ class Bot
             gladStart: gladDate,
             gladEnd: gladDate,
             gladArea: gladArea,
+            gladLog: gladLog,
             country: memory.country,
             area: totalArea,
         });
