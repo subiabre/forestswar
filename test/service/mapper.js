@@ -1,5 +1,4 @@
 const Country = require('../../src/service/country');
-const { count } = require('../../src/model/memory');
 
 var Mapper = require('../../src/service/mapper'),
     chai = require('chai'),
