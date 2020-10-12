@@ -1,6 +1,7 @@
 const 
     Country = require('./service/country'),
     Memory = require('./model/memory'),
+    Log = require('./model/log'),
     Twitter = require('twitter'),
     GLAD = require('./service/glad'),
     Mapper = require('./service/mapper');
@@ -181,6 +182,15 @@ class Bot
             gladAreaString = this.toLocaleAreaString(gladArea);
         this.console(`AREA IS: ${gladArea}`);
 
+        // Save log of GLAD fetch
+        let newLog = new Log({
+            gladStart: gladStart,
+            gladEnd: gladEnd,
+            gladLog: gladLog
+        });
+
+        await newLog.save();
+
         // Exit on no deforestated area for this period
         if (gladArea < 1) {
             this.console('NO NEW DEFORESTATION. EXITING ROUTINE.');
@@ -256,7 +266,6 @@ class Bot
             gladStart: gladDate,
             gladEnd: gladDate,
             gladArea: gladArea,
-            gladLog: gladLog,
             country: memory.country,
             area: totalArea,
         });

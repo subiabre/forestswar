@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var memorySchema = new Schema({
+var logSchema = new Schema({
     
     /**
      * @var {Date} date Date of memory generation
@@ -31,31 +31,14 @@ var memorySchema = new Schema({
     },
 
     /**
-     * @var {Number} gladArea Area of deforestation for the period between gladStart and gladEnd \
+     *  @var {Object} glad Glad log for each country API response \
      * at the time the request was made
      */
-    gladArea: {
-        type: Number,
-        default: 0,
-        required: true
-    },
-    
-    /**
-     * @var {Number} country List index of the country
-     */
-    country: {
-        type: Number,
-        default: 0,
-        required: true,
-    },
-
-    /**
-     * @var {Number} area Aggregated area of deforestation
-     */
-    area: {
-        type: Number,
-        default: 0
+    gladLog: {
+        type: Object,
+        default: {},
+        required: false
     }
 });
 
-module.exports = mongoose.model('Memory', memorySchema);
+module.exports = mongoose.model('Log', logSchema);
