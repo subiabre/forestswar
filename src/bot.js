@@ -184,8 +184,8 @@ class Bot
 
         // Save log of GLAD fetch
         let newLog = new Log({
-            gladStart: gladStart,
-            gladEnd: gladEnd,
+            gladStart: gladDate,
+            gladEnd: gladDate,
             gladLog: gladLog
         });
 
