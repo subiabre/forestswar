@@ -4,7 +4,9 @@ const
     Log = require('./model/log'),
     Twitter = require('twitter'),
     GLAD = require('./service/glad'),
-    Mapper = require('./service/mapper');
+    Mapper = require('./service/mapper'),
+    fs = require('fs')
+    ;
 
 /**
  * A bot to help visualize forest loss accross the globe.
@@ -43,6 +45,11 @@ class Bot
         if (this.env.logging) {
             console.log(this.consoleLog[this.consoleLog.length - 1]);
         }
+    }
+
+    async consoleSave(filename)
+    {
+        return await fs.writeFileSync(filename, JSON.stringify(this.consoleLog, null, 2));
     }
 
     /**
@@ -126,13 +133,11 @@ class Bot
         this.http = require('http');
 
         this.countries = require('country-list');
-
-        let fs = require('fs'),
-        fileList = fs.readFileSync('src/list.json');
     
         /**
          * Countries list
          */
+        let fileList = fs.readFileSync(__dirname + '/list.json');
         this.list = JSON.parse(fileList);
 
         /**

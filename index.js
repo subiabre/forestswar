@@ -1,15 +1,10 @@
-var express = require('express'),
-    app = express(),
-    bot = require('./src/bot');
+const bot = require('./src/bot');
 
-app.get('/', (req, res) => {
-    res.send(bot.getLog());
-});
-
-var listener = app.listen(process.env.PORT, async () => {
-    let address = 'http://localhost:' + listener.address().port;
-    bot.console('SERVER LISTENING AT: ' + address);
-
+const run = async () => {
     let routine = await bot.routine();
+
+    await bot.consoleSave('log.json');
     process.exit(routine);
-});
+}
+
+run();
