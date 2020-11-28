@@ -7,8 +7,9 @@ This package contains the application that runs and serves the Twitter feed at t
 
 1. [About](#About)
 2. [Usage](#Usage)
-3. [Support](#Support)
-4. [Concerns](#Concerns-about-accuracy-and-processing-of-data)
+3. [Setup](#Setup)
+4. [Support](#Support)
+5. [Concerns](#Concerns-about-accuracy-and-processing-of-data)
 
 ## About
 I created this bot because I found it hard to visualize just how much area is deforestated in comparisons like "*1 football pitch per minute*". Inspired by a friend's [one](https://gitlab.com/wishiwasrubin/fwbot) and someone else's [bot](https://twitter.com/WorldWarBot).
@@ -40,11 +41,12 @@ Consider the following examples:
 1. Generate a map painting 200 square kilometers in Andorra in blue.
 ```js
 const Mapper = require('./src/service/mappper');
-const Country = require('./src/service/country);
+const Country = require('./src/service/country');
 
-let map = new Mapper(),
-    andorra = await new Country('AND').getByCode(),
-    map = await andorra.getMapImage(),
+const mapper = new Mapper();
+const andorra = await new Country('AND').getByCode();
+
+let map = await andorra.getMapImage(),
     area = await mapper.kilometersToPixels(200, andorra)
     image = await mapper.paintArea(map, area, '#0000ff');
         
@@ -53,13 +55,58 @@ image.write('map/AND.png');
 
 2. Obtaining the deforestation for 2015.
 ```js
-const GLAD = require('./src/service/glad'),
-    glad = new GLAD();
+const GLAD = require('./src/service/glad');
+const api = new GLAD();
 
-let period = glad.formatPeriod('2015-01-01', '2015-12-31'),
-    area = await glad.getAlerts(period);
+let period = api.formatPeriod('2015-01-01', '2015-12-31'),
+    area = await api.getAlerts(period);
 
 console.log(area);
+```
+
+## Setup
+In order to get the bot ready and working you'll need a [MongoDB](https://www.mongodb.com/) instance.
+
+Copy the `.env.example`:
+
+```bash
+cp .env.example .env
+```
+Then add the necessary parameters.
+
+### .env
+`TWITTER*` vars will switch the Twitter behaviour of the bot. You can get your Twitter keys in the [developer center](https://developer.twitter.com/en). Not necessary for the bot to start the routine but necessary for the bot to finish the routine.
+`DATABASE*` vars will switch the Database behaviour of the bot. Necessary to start the routine.
+`LOGGING*` vars will turn off/on the usage of logging of the bot, not necessary to complete the routine.
+
+`DELAY_MS` will make the bot wait for as much milliseconds you set between requests to the GLAD API. In previous releases a long enough wait was critical to reduce GLAD data loss. Now it's been pretty safe to leave this number at 220. Keep in mind that you will be throwing hundreds of requests to the API so be kind to their servers.
+
+`DELAYS_DAYS` will make the bot look for deforestation happened in the day as many days behind the current date as the number you put here. It can be used to perform [bulk updates](https://gist.github.com/subiabre/81ac8fd3ebb79cf4a877c8426d41d3aa) but actually is used as a safe mechanism to avoid dealing with added data to the GLAD API after the bot performs its routine. Usually a week is fine.
+
+### Cron
+Now to make this package actually a full bot you need to have it run automatically.
+
+In linux environments a crontab will be fine, but whatever it is that you use to schedule daily runs of the bot, make sure it runs the following:
+
+```bash
+node path/to/bot/index.js
+```
+
+### Troubleshooting
+You can tell if any of the services the bot relies on is down by running the tests:
+```bash
+npm test
+```
+
+Sometimes it could be one of the tests gets timed out without necessarily being because the service is down, but it definitely could be a signal.
+
+You also have detailed, country by country logging of the GLAD API in the mongo instance.
+
+```bash
+# get the latest GLAD log
+mongo
+use <nameOfTheDatabase>
+db.logs.find().sort({_id:-1}).limit(1);
 ```
 
 ## Support
