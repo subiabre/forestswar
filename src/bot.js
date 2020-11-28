@@ -221,7 +221,6 @@ class Bot
         
         // Get map with deforestated area
         let mapper = new Mapper(),
-            image = await country.getMapImage(),
             pixelsAll = await mapper.kilometersToPixels(country.data.area, country),
             pixelsPrevious = await mapper.kilometersToPixels(deforestationArea, country),
             pixelsCurrent = await mapper.kilometersToPixels(deforestationAreaNew, country);
@@ -232,7 +231,8 @@ class Bot
         }
         
         // Paint map
-        let map = await mapper.paintArea(image, pixelsAll, this.env.grassColor);
+        let map = await country.getMapImage(),
+            map = await mapper.paintArea(map, pixelsAll, this.env.grassColor);
             map = await mapper.paintArea(map, pixelsPrevious, this.env.deforestatedColorPrevious, this.env.grassColor);
             map = await mapper.paintArea(map, pixelsCurrent, this.env.deforestatedColor, this.env.grassColor);
         this.console('GENERATED MAP.');
