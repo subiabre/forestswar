@@ -72,7 +72,9 @@ class Bot
     loadEnv()
     {
         var dotenv = require('dotenv');
-        dotenv.config();
+        dotenv.config({
+            path: __dirname + '/../.env'
+        });
 
         // Store env vars
         this.env = {
