@@ -1,18 +1,18 @@
+version: "3"
 services:
-  web:
+  forestswar:
+    container_name: forestswar
+    image: forestswar
+    restart: always
     build: .
-    depends_on:
-      - db
     ports:
-      -"8000:8000"
-    volumes:
-      - .:/usr/src/forestswar
-      - /usr/src/forestswar/node_modules
-  db:
+      - "7500:7500"
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
     image: mongo
-    expose:
-      - "27017"
     volumes:
-      - mongodata:/data/db
-volumes:
-  mongodata:
+      - ./data:/data/db
+    ports:
+      - '27018:27017'
