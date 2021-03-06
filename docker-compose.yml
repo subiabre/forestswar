@@ -3,16 +3,16 @@ services:
     build: .
     depends_on:
       - db
-      ports:
-        - "8000:8000"
-      volumes:
-        - .:/usr/src/forestswar
-        - /usr/src/forestswar/node_modules
+    ports:
+      -"8000:8000"
+    volumes:
+      - .:/usr/src/forestswar
+      - /usr/src/forestswar/node_modules
   db:
     image: mongo
     expose:
       - "27017"
     volumes:
-        - mongodata:/data/db
+      - mongodata:/data/db
 volumes:
   mongodata:
