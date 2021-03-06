@@ -3,6 +3,7 @@ services:
   forestswar:
     container_name: forestswar
     image: forestswar
+    restart: always
     build: .
     ports:
       - "7500:7500"
