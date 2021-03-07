@@ -1,21 +1,20 @@
 version: "3"
+
 services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27017:27017'
+
   forestswar:
     container_name: forestswar
     image: forestswar
-    restart: always
+    restart: on-failure
     build: .
     ports:
       - "7500:7500"
     links:
       - mongo
-  mongo:
-    container_name: mongo
-    image: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    volumes:
-      - ./data:/data/db
-    ports:
-      - '27018:27017'
