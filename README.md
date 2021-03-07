@@ -65,8 +65,7 @@ console.log(area);
 ```
 
 ## Setup
-In order to get the bot ready and working you'll need a [MongoDB](https://www.mongodb.com/) instance.
-
+In order to get the bot ready and working you'll need to have [docker](https://www.docker.com/) and docker-compose installed.
 Copy the `.env.example`:
 
 ```bash
@@ -76,7 +75,7 @@ Then add the necessary parameters.
 
 ### .env
 `TWITTER*` vars will switch the Twitter behaviour of the bot. You can get your Twitter keys in the [developer center](https://developer.twitter.com/en). Not necessary for the bot to start the routine but necessary for the bot to finish the routine.
-`DATABASE*` vars will switch the Database behaviour of the bot. Necessary to start the routine.
+`DATABASE*` vars will switch the Database behaviour of the bot. Necessary to complete the routine.
 `LOGGING*` vars will turn off/on the usage of logging of the bot, not necessary to complete the routine.
 
 `DELAY_MS` will make the bot wait for as much milliseconds you set between requests to the GLAD API. In previous releases a long enough wait was critical to reduce GLAD data loss. Now it's been pretty safe to leave this number at 220. Keep in mind that you will be throwing hundreds of requests to the API so be kind to their servers.
@@ -86,10 +85,11 @@ Then add the necessary parameters.
 ### Cron
 Now to make this package actually a full bot you need to have it run automatically.
 
-In linux environments a crontab will be fine, but whatever it is that you use to schedule daily runs of the bot, make sure it runs the following:
+In linux environments a crontab will be fine, but whatever it is that you use to schedule daily runs of the bot, take the following crontab example:
 
 ```bash
-node path/to/bot/index.js
+# crontab
+/usr/bin/docker-compose -f path/to/forestswar/docker-compose.yml up --build
 ```
 
 ### Troubleshooting
@@ -105,7 +105,7 @@ You also have detailed, country by country logging of the GLAD API in the mongo 
 ```bash
 # get the latest GLAD log
 mongo
-use <nameOfTheDatabase>
+use <nameOfTheDatabase> # "deforestation" by default
 db.logs.find().sort({_id:-1}).limit(1);
 ```
 
