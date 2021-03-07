@@ -2,5 +2,8 @@
 node_modules
 *.log
 
+# Mongo
+data/
+
 # App env
 .env
