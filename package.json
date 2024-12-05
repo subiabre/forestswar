@@ -30,7 +30,7 @@
     "country-iso-2-to-3": "^1.1.0",
     "country-list": "^2.2.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.3",
+    "express": "^4.21.1",
     "jimp": "^0.9.3",
     "mongoose": "^5.13.20",
     "replace-color": "^2.1.0",
